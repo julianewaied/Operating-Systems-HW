@@ -40,6 +40,11 @@ int main(void)
         {
             break;
         }
+        if(strncmp(command, "history", 7) == 0)
+        {
+            print_list(head);
+            continue;
+        }
         
         //remove the \n from command
         command[strlen(command)-1]='\0';
@@ -90,7 +95,7 @@ node* list_push(node* new_node, node* head)
 void print_list(nodeptr curr)
 {
     if(!curr) return;
-    fprintf(stdout, "%s", curr->cmd);
+    fprintf(stdout, "%s\n", curr->cmd);
     print_list(curr->next);
 }
 
