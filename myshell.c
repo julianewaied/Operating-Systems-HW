@@ -21,8 +21,7 @@ void get_args(char* argv[MAX_ARGS],char* command);
 node* list_push(node*,node*);
 nodeptr cmd_push(node* new_node, node* head, char* cmd);
 void print_list(nodeptr current);
-//can u see this change
-//another comment
+//testing
 int main(void)
 {
     close(2);
