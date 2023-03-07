@@ -25,8 +25,8 @@ void print_list(nodeptr current);
 //another comment
 int main(void)
 {
-    //close(2);
-    //dup(1);
+    close(2);
+    dup(1);
     char command[BUFFER_SIZE];
     // a linked list of commands proceeded
     node* head = NULL;
