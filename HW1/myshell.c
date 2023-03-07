@@ -62,7 +62,7 @@ int main(void)
 
         if(pid==0){
             execvp(argv[0], argv);
-            fprintf(stdout,"%s","command execution failed!");
+            fprintf(stdout,"%s","command execution failed!\n");
             exit(1);
         }
 

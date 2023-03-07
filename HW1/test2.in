@@ -1,0 +1,13 @@
+ls
+sleep 2 &
+cat words.txt
+cat words.txt &
+false command
+history
+ls -u -o &
+ls -o -u
+ls -x
+ls -u -o
+cd idek
+history
+exit1234

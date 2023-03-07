@@ -1,0 +1,87 @@
+my-shell> command execution failed!sleep: invalid time interval `&'
+Try `sleep --help' for more information.
+cat: words.txt: Protocol error
+advice
+agenda
+avoid
+beyond
+camera
+candle
+center
+concern
+couch
+damage
+desk
+diamond
+disagree
+divorce
+effect
+element
+evening
+fashion
+friend
+gallery
+garlic
+glue
+health
+history
+humble
+indicate
+injury
+jacket
+join
+journal
+justice
+laptop
+lawn
+library
+limit
+lunch
+machine
+market
+metal
+narrow
+ocean
+official
+online
+outside
+painting
+partner
+pepper
+pilot
+plate
+printer
+quality
+require
+resort
+
+
+cat: &: Protocol error
+ls: &: Protocol error
+ls: invalid option -- 
+Try `ls --help' for more information.
+ls: invalid option -- 
+Try `ls --help' for more information.
+ls: invalid option -- 
+Try `ls --help' for more information.
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> false
+cat
+cat
+sleep
+ls
+my-shell> my-shell> my-shell> my-shell> my-shell> command execution failed!my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> false
+cat
+cat
+sleep
+ls
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> cd
+ls
+ls
+ls
+ls
+false
+cat
+cat
+sleep
+ls
+my-shell> 
