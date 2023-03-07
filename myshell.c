@@ -18,7 +18,8 @@ typedef struct op
 node* list_push(node*,node*);
 nodeptr cmd_push(node* new_node, node* head, char* cmd);
 void print_list(nodeptr current);
-
+//can u see this change
+//another comment
 int main(void)
 {
     //close(2);
