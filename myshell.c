@@ -44,6 +44,13 @@ int main(void)
         //remove the \n from command
         command[strlen(command)-1]='\0';
         
+        int background_task=(command[strlen(command)-1]=='&');
+
+        //remove the '&' token if we have a background task
+        if(background_task) command[strlen(command)-1] = '\0';
+
+
+
         char* argv[MAX_ARGS];
         get_args(argv,command);
 
@@ -51,9 +58,12 @@ int main(void)
 
         if(pid==0){
             execvp(argv[0], argv);
-
+            fprintf(stdout,"%s","command execution failed!");
+            exit(1);
         }
-        wait(NULL);
+
+        if(!background_task)
+            waitpid(pid,NULL,0);
 
         nodeptr newNode = (nodeptr)malloc(sizeof(node));
         if(newNode==NULL) exit(1);
