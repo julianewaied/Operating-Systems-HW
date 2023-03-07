@@ -6,6 +6,7 @@
 #include <stdlib.h>
 
 #define BUFFER_SIZE 100
+#define MAX_ARGS 15
 
 // this will be used later on for 'history'
 typedef struct op* nodeptr;
@@ -15,6 +16,8 @@ typedef struct op
     nodeptr next;
 }node;
 
+
+void get_args(char* argv[MAX_ARGS],char* command);
 node* list_push(node*,node*);
 nodeptr cmd_push(node* new_node, node* head, char* cmd);
 void print_list(nodeptr current);
@@ -37,6 +40,20 @@ int main(void)
         {
             break;
         }
+        
+        //remove the \n from command
+        command[strlen(command)-1]='\0';
+        
+        char* argv[MAX_ARGS];
+        get_args(argv,command);
+
+        int pid = fork();
+
+        if(pid==0){
+            execvp(argv[0], argv);
+
+        }
+        wait(NULL);
 
         nodeptr newNode = (nodeptr)malloc(sizeof(node));
         if(newNode==NULL) exit(1);
@@ -65,4 +82,17 @@ void print_list(nodeptr curr)
     if(!curr) return;
     fprintf(stdout, "%s", curr->cmd);
     print_list(curr->next);
+}
+
+void get_args(char* argv[MAX_ARGS],char* const command){
+    char* arg;
+    arg=strtok(command," ");
+    int i=0;
+    while(arg!=NULL){
+        // add the current arg
+        argv[i++]=arg;
+        arg=strtok(NULL," ");
+    }
+    argv[i]=NULL;
+
 }
