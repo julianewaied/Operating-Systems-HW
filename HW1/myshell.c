@@ -24,8 +24,8 @@ void print_list(nodeptr current);
 //testing
 int main(void)
 {
-    close(2);
-    dup(1);
+    //close(2);
+    //dup(1);
     char command[BUFFER_SIZE];
     // a linked list of commands proceeded
     node* head = NULL;
@@ -48,15 +48,35 @@ int main(void)
         //remove the \n from command
         command[strlen(command)-1]='\0';
         
+        // dont remove this code, waiting for safaa answer
+/*
         int background_task=(command[strlen(command)-1]=='&');
 
         //remove the '&' token if we have a background task
         if(background_task) command[strlen(command)-1] = '\0';
-
-
+        
+*/
+        nodeptr newNode = (nodeptr)malloc(sizeof(node));
+        if(newNode==NULL) exit(1);
+        newNode->next=NULL;
+        newNode->cmd = malloc(BUFFER_SIZE * sizeof(int));
+        if(newNode->cmd==NULL) exit(1);
+        head = cmd_push(newNode,head,command);
+        //fprintf(stdout,"%s\n",command);
+        
+        
 
         char* argv[MAX_ARGS];
         get_args(argv,command);
+
+        int background_task;
+        int i=0;
+        while(argv[i+1]!=NULL) i++;
+
+        background_task= !strcmp(argv[i],"&");
+
+        //remove the '&' token if we have a background task
+        if(background_task) argv[i]=NULL;
 
         int pid = fork();
 
@@ -69,12 +89,7 @@ int main(void)
         if(!background_task)
             waitpid(pid,NULL,0);
 
-        nodeptr newNode = (nodeptr)malloc(sizeof(node));
-        if(newNode==NULL) exit(1);
-        newNode->next=NULL;
-        newNode->cmd = malloc(BUFFER_SIZE * sizeof(int));
-        if(newNode->cmd==NULL) exit(1);
-        head = cmd_push(newNode,head,command);
+        
     }
     return 0;
 }
