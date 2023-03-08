@@ -21,7 +21,16 @@ void get_args(char* argv[MAX_ARGS],char* command);
 node* list_push(node*,node*);
 nodeptr cmd_push(node* new_node, node* head, char* cmd);
 void print_list(nodeptr current);
-//testing
+void print(char* argv[MAX_ARGS])
+{
+    int i = 0;
+    while(argv[i])
+    {
+        fprintf(stdout, argv[i]);
+        fprintf(stdout, "\n");
+        i++;
+    }
+}
 int main(void)
 {
     //close(2);
@@ -72,11 +81,14 @@ int main(void)
         int background_task;
         int i=0;
         while(argv[i+1]!=NULL) i++;
-
-        background_task= !strcmp(argv[i],"&");
+        // print(argv);
+        char* last = argv[i];
+        background_task= last[strlen(last)-1]=='&';
 
         //remove the '&' token if we have a background task
-        if(background_task) argv[i]=NULL;
+        if(background_task) last[strlen(last)-1]='\0';
+        // if it's spaced from other arguments, get rid of it.
+        if(last[0]=='\0') argv[i] = NULL;
 
         int pid = fork();
 
