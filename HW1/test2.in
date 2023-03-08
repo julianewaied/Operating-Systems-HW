@@ -1,5 +1,6 @@
 ls
 sleep 2 &
+echo TESTING HELLO
 cat words.txt
 cat words.txt &
 false command
@@ -9,5 +10,16 @@ ls -o -u
 ls -x
 ls -u -o
 cd idek
+mkdir newdir
+ls
+mkdir newdir
+cp test2.in ./newdir/test2.in
+ls ./newdir
+rmdir newdir
+sleep 10& 
+ps 
+who
+sleep 10
+ps
 history
 exit1234
