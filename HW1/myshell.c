@@ -21,20 +21,10 @@ void get_args(char* argv[MAX_ARGS],char* command);
 node* list_push(node*,node*);
 nodeptr cmd_push(node* new_node, node* head, char* cmd);
 void print_list(nodeptr current);
-void print(char* argv[MAX_ARGS])
-{
-    int i = 0;
-    while(argv[i])
-    {
-        fprintf(stdout, argv[i]);
-        fprintf(stdout, "\n");
-        i++;
-    }
-}
 int main(void)
 {
-    //close(2);
-    //dup(1);
+    close(2);
+    dup(1);
     char command[BUFFER_SIZE];
     // a linked list of commands proceeded
     node* head = NULL;
@@ -71,7 +61,6 @@ int main(void)
         newNode->cmd = malloc(BUFFER_SIZE * sizeof(int));
         if(newNode->cmd==NULL) exit(1);
         head = cmd_push(newNode,head,command);
-        //fprintf(stdout,"%s\n",command);
         
         
 
