@@ -8,7 +8,6 @@
 #define BUFFER_SIZE 100
 #define MAX_ARGS 15
 
-// this will be used later on for 'history'
 typedef struct op* nodeptr;
 typedef struct op
 {
