@@ -38,8 +38,8 @@ int main(void)
         if(strncmp(command, "exit", 4) == 0)
             break;
         //remove the \n from command
-        command[strlen(command)-1]='\0';
-        head = cmd_push(head,command);
+        if(command[strlen(command)-1]=='\n') 
+            command[strlen(command)-1] = '\0';
         if(strncmp(command, "history", 7) == 0)
             print_list(head);
         else activate(command);

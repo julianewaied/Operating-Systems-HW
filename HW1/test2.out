@@ -1,5 +1,7 @@
-my-shell> command execution failed!sleep: invalid time interval `&'
+error: No such file or directory
+my-shell> sleep: invalid time interval `'
 Try `sleep --help' for more information.
+TESTING HELLO
 cat: words.txt: Protocol error
 advice
 agenda
@@ -56,32 +58,31 @@ require
 resort
 
 
-cat: &: Protocol error
-ls: &: Protocol error
+cat: : Protocol error
 ls: invalid option -- 
 Try `ls --help' for more information.
 ls: invalid option -- 
 Try `ls --help' for more information.
 ls: invalid option -- 
 Try `ls --help' for more information.
-my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> false
-cat
-cat
-sleep
-ls
-my-shell> my-shell> my-shell> my-shell> my-shell> command execution failed!my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> false
-cat
-cat
-sleep
-ls
-my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> cd
-ls
-ls
-ls
-ls
-false
-cat
-cat
-sleep
-ls
-my-shell> 
+ls: invalid option -- 
+Try `ls --help' for more information.
+error: No such file or directory
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> mkdir: cannot create directory `newdir\r': Protocol error
+error: No such file or directory
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> mkdir: cannot create directory `newdir\r': Protocol error
+cp: accessing `./newdir/test2.in\r': Protocol error
+ls: ./newdir: Protocol error
+rmdir: `newdir\r': Protocol error
+sleep: invalid time interval `'
+Try `sleep --help' for more information.
+ps: error: Garbage option.
+usage: ps -[Unix98 options]
+       ps [BSD-style options]
+       ps --[GNU-style long options]
+       ps --help for a command summary
+error: No such file or directory
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> sleep: invalid time interval `10'
+Try `sleep --help' for more information.
+error: No such file or directory
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> 
