@@ -26,8 +26,8 @@ void activate(char* command);
 
 int main(void)
 {
-    close(2);
-    dup(1);
+    //close(2);
+    //dup(1);
     char command[BUFFER_SIZE];
     node* head = NULL;
     while (1)
