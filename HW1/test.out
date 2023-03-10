@@ -1,3 +1,5 @@
-Hi There
-Bye
-my-shell> my-shell> my-shell> my-shell> 
+error: No such file or directory
+my-shell> command is : |ech|, is it NULL? : 0
+error: No such file or directory
+my-shell> my-shell> command is : |ps|, is it NULL? : 1
+my-shell> my-shell> my-shell> 

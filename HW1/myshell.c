@@ -23,7 +23,6 @@ nodeptr cmd_push(node* head, char* cmd);
 void print_list(nodeptr current);
 int is_background(char* argv[MAX_ARGS]);
 void activate(char* command);
-
 int main(void)
 {
     //close(2);
@@ -37,9 +36,7 @@ int main(void)
         fgets(command, BUFFER_SIZE, stdin);
         if(strncmp(command, "exit", 4) == 0)
             break;
-        //remove the \n from command
-        if(command[strlen(command)-1]=='\n') 
-            command[strlen(command)-1] = '\0';
+        command[strlen(command)-1] = '\0';
         if(strncmp(command, "history", 7) == 0)
             print_list(head);
         else activate(command);
@@ -91,6 +88,8 @@ void activate(char* command)
 {
     char* argv[MAX_ARGS];
     get_args(argv,command);
+    if(argv[0][strlen(argv[0])-1]=='\n')
+        argv[0][strlen(argv[0])-1]='\0';
     int background_task = is_background(argv);
     pid_t pid = fork();
     if(pid==0)
