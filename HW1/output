@@ -1,0 +1,270 @@
+~$1 theory.docx
+HW1 theory.docx
+myshell
+myshell.c
+myshell.o
+mytest2.out
+newdir
+output
+output.out
+submitters.txt
+test2.in
+test2.out
+test.in
+test.out
+words.txt
+TESTING HELLO
+advice
+agenda
+avoid
+beyond
+camera
+candle
+center
+concern
+couch
+damage
+desk
+diamond
+disagree
+divorce
+effect
+element
+evening
+fashion
+friend
+gallery
+garlic
+glue
+health
+history
+humble
+indicate
+injury
+jacket
+join
+journal
+justice
+laptop
+lawn
+library
+limit
+lunch
+machine
+market
+metal
+narrow
+ocean
+official
+online
+outside
+painting
+partner
+pepper
+pilot
+plate
+printer
+quality
+require
+resort
+
+
+advice
+agenda
+avoid
+beyond
+camera
+candle
+center
+concern
+couch
+damage
+desk
+diamond
+disagree
+divorce
+effect
+element
+evening
+fashion
+friend
+gallery
+garlic
+glue
+health
+history
+humble
+indicate
+injury
+jacket
+join
+journal
+justice
+laptop
+lawn
+library
+limit
+lunch
+machine
+market
+metal
+narrow
+ocean
+official
+online
+outside
+painting
+partner
+pepper
+pilot
+plate
+printer
+quality
+require
+resort
+
+
+total 0
+-rwx------    1 root          162 Mar 10 11:23 ~$1 theory.docx
+-rwx------    1 root        17899 Mar 10 11:44 HW1 theory.docx
+-rwx------    1 root        13891 Mar 10 01:39 myshell
+-rwx------    1 root         2911 Mar 10 01:40 myshell.c
+-rwx------    1 root         1921 Mar  8 16:07 myshell.o
+-rwx------    1 root         2153 Mar 10 01:39 mytest2.out
+drwx------    1 root            0 Mar 10 11:44 newdir
+-rwx------    1 root          936 Mar 10 11:47 output
+-rwx------    1 root            0 Mar 10 11:44 output.out
+-rwx------    1 root           96 Mar  8 00:06 submitters.txt
+-rwx------    1 root          278 Mar 10 11:36 test2.in
+-rwx------    1 root         3295 Mar 10 11:46 test2.out
+-rwx------    1 root           40 Mar 10 01:39 test.in
+-rwx------    1 root           55 Mar 10 01:39 test.out
+-rwx------    1 root          382 Mar  8 16:08 words.txt
+total 0
+-rwx------    1 root          162 Mar 10 11:23 ~$1 theory.docx
+-rwx------    1 root        17899 Mar 10 11:44 HW1 theory.docx
+-rwx------    1 root        13891 Mar 10 01:39 myshell
+-rwx------    1 root         2911 Mar 10 01:40 myshell.c
+-rwx------    1 root         1921 Mar  8 16:07 myshell.o
+-rwx------    1 root         2153 Mar 10 01:39 mytest2.out
+drwx------    1 root            0 Mar 10 11:44 newdir
+-rwx------    1 root         1807 Mar 10 11:47 output
+-rwx------    1 root            0 Mar 10 11:44 output.out
+-rwx------    1 root           96 Mar  8 00:06 submitters.txt
+-rwx------    1 root          278 Mar 10 11:36 test2.in
+-rwx------    1 root         3295 Mar 10 11:46 test2.out
+-rwx------    1 root           40 Mar 10 01:39 test.in
+-rwx------    1 root           55 Mar 10 01:39 test.out
+-rwx------    1 root          382 Mar  8 16:08 words.txt
+~$1 theory.docx  HW1 theory.docx  myshell  myshell.c   myshell.o
+mytest2.out	 newdir		  output   output.out  submitters.txt
+test2.in	 test2.out	  test.in  test.out    words.txt
+total 0
+-rwx------    1 root          162 Mar 10 11:23 ~$1 theory.docx
+-rwx------    1 root        17899 Mar 10 11:44 HW1 theory.docx
+-rwx------    1 root        13891 Mar 10 01:39 myshell
+-rwx------    1 root         2911 Mar 10 01:40 myshell.c
+-rwx------    1 root         1921 Mar  8 16:07 myshell.o
+-rwx------    1 root         2153 Mar 10 01:39 mytest2.out
+drwx------    1 root            0 Mar 10 11:44 newdir
+-rwx------    1 root         2855 Mar 10 11:47 output
+-rwx------    1 root            0 Mar 10 11:44 output.out
+-rwx------    1 root           96 Mar  8 00:06 submitters.txt
+-rwx------    1 root          278 Mar 10 11:36 test2.in
+-rwx------    1 root         3295 Mar 10 11:46 test2.out
+-rwx------    1 root           40 Mar 10 01:39 test.in
+-rwx------    1 root           55 Mar 10 01:39 test.out
+-rwx------    1 root          382 Mar  8 16:08 words.txt
+error: No such file or directory
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> 7 history
+6 false command
+5 cat words.txt&
+4 cat words.txt
+3 echo TESTING HELLO
+2 sleep 2&
+1 ls
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> ~$1 theory.docx
+HW1 theory.docx
+myshell
+myshell.c
+myshell.o
+mytest2.out
+newdir
+output
+output.out
+submitters.txt
+test2.in
+test2.out
+test.in
+test.out
+words.txt
+mkdir: cannot create directory `newdir': File exists
+~$1 theory.docx
+HW1 theory.docx
+myshell
+myshell.c
+myshell.o
+mytest2.out
+newdir
+output
+output.out
+submitters.txt
+test2.in
+test2.out
+test.in
+test.out
+words.txt
+test2.in
+rmdir: `newdir': Directory not empty
+  PID TTY          TIME CMD
+10265 pts/0    00:00:00 bash
+11434 pts/0    00:00:00 myshell
+11439 pts/0    00:00:00 sleep <defunct>
+11442 pts/0    00:00:00 cat <defunct>
+11447 pts/0    00:00:00 ls <defunct>
+11489 pts/0    00:00:00 sleep
+11490 pts/0    00:00:00 ps
+root     :0           Mar  7 23:18         
+  PID TTY          TIME CMD
+10265 pts/0    00:00:00 bash
+11434 pts/0    00:00:00 myshell
+11439 pts/0    00:00:00 sleep <defunct>
+11442 pts/0    00:00:00 cat <defunct>
+11447 pts/0    00:00:00 ls <defunct>
+11489 pts/0    00:00:00 sleep <defunct>
+11496 pts/0    00:00:00 ps
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> 7 history
+6 false command
+5 cat words.txt&
+4 cat words.txt
+3 echo TESTING HELLO
+2 sleep 2&
+1 ls
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> 27 history
+26 ps
+25 sleep 10
+24 who
+23 ps
+22 sleep 10 &
+21 rmdir newdir
+20 ls ./newdir
+19 cp test2.in ./newdir/test2.in
+18 ls
+17 mkdir newdir
+16 ls
+15 mkdir newdir
+14 cd idek
+13 rmdir newdir
+12 mkdir newdir
+11 ls -u -o
+10 ls -x
+9 ls -o -u
+8 ls -u -o&
+7 history
+6 false command
+5 cat words.txt&
+4 cat words.txt
+3 echo TESTING HELLO
+2 sleep 2&
+1 ls
+my-shell> 
