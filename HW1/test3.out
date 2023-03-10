@@ -1,6 +1,6 @@
-error: No such file or directory
-my-shell> command is : |99|  PID TTY          TIME CMD
+HELLO
+  PID TTY          TIME CMD
 12236 pts/0    00:00:00 bash
-12413 pts/0    00:00:00 myshell
-12415 pts/0    00:00:00 ps
+13257 pts/0    00:00:00 myshell
+13259 pts/0    00:00:00 ps
 my-shell> my-shell> my-shell> 

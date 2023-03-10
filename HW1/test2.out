@@ -1,8 +1,22 @@
-error: No such file or directory
-my-shell> sleep: invalid time interval `'
-Try `sleep --help' for more information.
+~$1 theory.docx
+HW1 theory.docx
+myshell
+myshell.c
+myshell.o
+mytest2.out
+mytest.out
+newdir
+output
+output.out
+submitters.txt
+test2.in
+test2.out
+test3.in
+test3.out
+test.in
+test.out
+words.txt
 TESTING HELLO
-cat: words.txt: Protocol error
 advice
 agenda
 avoid
@@ -58,31 +72,234 @@ require
 resort
 
 
-cat: : Protocol error
-ls: invalid option -- 
-Try `ls --help' for more information.
-ls: invalid option -- 
-Try `ls --help' for more information.
-ls: invalid option -- 
-Try `ls --help' for more information.
-ls: invalid option -- 
-Try `ls --help' for more information.
+advice
+agenda
+avoid
+beyond
+camera
+candle
+center
+concern
+couch
+damage
+desk
+diamond
+disagree
+divorce
+effect
+element
+evening
+fashion
+friend
+gallery
+garlic
+glue
+health
+history
+humble
+indicate
+injury
+jacket
+join
+journal
+justice
+laptop
+lawn
+library
+limit
+lunch
+machine
+market
+metal
+narrow
+ocean
+official
+online
+outside
+painting
+partner
+pepper
+pilot
+plate
+printer
+quality
+require
+resort
+
+
+total 0
+-rwx------    1 root          162 Mar 10 12:19 ~$1 theory.docx
+-rwx------    1 root        17899 Mar 10 12:19 HW1 theory.docx
+-rwx------    1 root        13931 Mar 10 15:41 myshell
+-rwx------    1 root         2957 Mar 10 15:41 myshell.c
+-rwx------    1 root         1921 Mar  8 16:07 myshell.o
+-rwx------    1 root        16480 Mar 10 15:41 mytest2.out
+-rwx------    1 root           55 Mar 10 15:41 mytest.out
+drwx------    1 root            0 Mar 10 15:41 newdir
+-rwx------    1 root         5709 Mar 10 12:19 output
+-rwx------    1 root         4881 Mar 10 12:19 output.out
+-rwx------    1 root           96 Mar  8 00:06 submitters.txt
+-rwx------    1 root          225 Mar 10 15:26 test2.in
+-rwx------    1 root          966 Mar 10 15:41 test2.out
+-rwx------    1 root           18 Mar 10 15:17 test3.in
+-rwx------    1 root          152 Mar 10 15:18 test3.out
+-rwx------    1 root           40 Mar 10 01:39 test.in
+-rwx------    1 root           55 Mar 10 15:41 test.out
+-rwx------    1 root          382 Mar 10 11:56 words.txt
+total 0
+-rwx------    1 root          162 Mar 10 12:19 ~$1 theory.docx
+-rwx------    1 root        17899 Mar 10 12:19 HW1 theory.docx
+-rwx------    1 root        13931 Mar 10 15:41 myshell
+-rwx------    1 root         2957 Mar 10 15:41 myshell.c
+-rwx------    1 root         1921 Mar  8 16:07 myshell.o
+-rwx------    1 root        16480 Mar 10 15:41 mytest2.out
+-rwx------    1 root           55 Mar 10 15:41 mytest.out
+drwx------    1 root            0 Mar 10 15:41 newdir
+-rwx------    1 root         5709 Mar 10 12:19 output
+-rwx------    1 root         4881 Mar 10 12:19 output.out
+-rwx------    1 root           96 Mar  8 00:06 submitters.txt
+-rwx------    1 root          225 Mar 10 15:26 test2.in
+-rwx------    1 root          966 Mar 10 15:41 test2.out
+-rwx------    1 root           18 Mar 10 15:17 test3.in
+-rwx------    1 root          152 Mar 10 15:18 test3.out
+-rwx------    1 root           40 Mar 10 01:39 test.in
+-rwx------    1 root           55 Mar 10 15:41 test.out
+-rwx------    1 root          382 Mar 10 11:56 words.txt
+~$1 theory.docx  HW1 theory.docx  myshell    myshell.c	myshell.o
+mytest2.out	 mytest.out	  newdir     output	output.out
+submitters.txt	 test2.in	  test2.out  test3.in	test3.out
+test.in		 test.out	  words.txt
+total 0
+-rwx------    1 root          162 Mar 10 12:19 ~$1 theory.docx
+-rwx------    1 root        17899 Mar 10 12:19 HW1 theory.docx
+-rwx------    1 root        13931 Mar 10 15:41 myshell
+-rwx------    1 root         2957 Mar 10 15:41 myshell.c
+-rwx------    1 root         1921 Mar  8 16:07 myshell.o
+-rwx------    1 root        16480 Mar 10 15:41 mytest2.out
+-rwx------    1 root           55 Mar 10 15:41 mytest.out
+drwx------    1 root            0 Mar 10 15:41 newdir
+-rwx------    1 root         5709 Mar 10 12:19 output
+-rwx------    1 root         4881 Mar 10 12:19 output.out
+-rwx------    1 root           96 Mar  8 00:06 submitters.txt
+-rwx------    1 root          225 Mar 10 15:26 test2.in
+-rwx------    1 root         3258 Mar 10 15:41 test2.out
+-rwx------    1 root           18 Mar 10 15:17 test3.in
+-rwx------    1 root          152 Mar 10 15:18 test3.out
+-rwx------    1 root           40 Mar 10 01:39 test.in
+-rwx------    1 root           55 Mar 10 15:41 test.out
+-rwx------    1 root          382 Mar 10 11:56 words.txt
+mkdir: cannot create directory `newdir': File exists
+mkdir: cannot create directory `newdir': File exists
 error: No such file or directory
-my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> mkdir: cannot create directory `newdir\r': Protocol error
-error: No such file or directory
-my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> mkdir: cannot create directory `newdir\r': Protocol error
-cp: accessing `./newdir/test2.in\r': Protocol error
-ls: ./newdir: Protocol error
-rmdir: `newdir\r': Protocol error
-sleep: invalid time interval `'
-Try `sleep --help' for more information.
-ps: error: Garbage option.
-usage: ps -[Unix98 options]
-       ps [BSD-style options]
-       ps --[GNU-style long options]
-       ps --help for a command summary
-error: No such file or directory
-my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> sleep: invalid time interval `10'
-Try `sleep --help' for more information.
-error: No such file or directory
-my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> 
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> 7 history
+
+6 false command
+
+5 cat words.txt&
+
+4 cat words.txt
+
+3 echo TESTING HELLO
+
+2 sleep 2&
+
+1 ls
+
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> ~$1 theory.docx
+HW1 theory.docx
+myshell
+myshell.c
+myshell.o
+mytest2.out
+mytest.out
+newdir
+output
+output.out
+submitters.txt
+test2.in
+test2.out
+test3.in
+test3.out
+test.in
+test.out
+words.txt
+test2.in
+rmdir: `newdir': Directory not empty
+  PID TTY          TIME CMD
+13373 pts/0    00:00:00 bash
+13609 pts/0    00:00:00 myshell
+13611 pts/0    00:00:00 sleep
+13614 pts/0    00:00:00 cat <defunct>
+13616 pts/0    00:00:00 ls <defunct>
+13626 pts/0    00:00:00 sleep
+13627 pts/0    00:00:00 ps
+root     :0           Mar  7 23:18         
+  PID TTY          TIME CMD
+13373 pts/0    00:00:00 bash
+13609 pts/0    00:00:00 myshell
+13611 pts/0    00:00:00 sleep <defunct>
+13614 pts/0    00:00:00 cat <defunct>
+13616 pts/0    00:00:00 ls <defunct>
+13626 pts/0    00:00:00 sleep <defunct>
+13633 pts/0    00:00:00 ps
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> 7 history
+
+6 false command
+
+5 cat words.txt&
+
+4 cat words.txt
+
+3 echo TESTING HELLO
+
+2 sleep 2&
+
+1 ls
+
+my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> my-shell> 23 history
+
+22 ps
+
+21 sleep 10
+
+20 who
+
+19 ps 
+
+18 sleep 10 &
+
+17 rmdir newdir
+
+16 ls ./newdir
+
+15 ls
+
+14 cd idek
+
+13 mkdir newdir
+
+12 mkdir newdir
+
+11 ls -u -o
+
+10 ls -x
+
+9 ls -o -u
+
+8 ls -u -o&
+
+7 history
+
+6 false command
+
+5 cat words.txt&
+
+4 cat words.txt
+
+3 echo TESTING HELLO
+
+2 sleep 2&
+
+1 ls
+
+my-shell> 

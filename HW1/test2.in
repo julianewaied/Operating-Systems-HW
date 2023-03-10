@@ -1,22 +1,21 @@
 ls
-sleep 2  
+sleep 2&
 echo TESTING HELLO
 cat words.txt
-cat words.txt 
+cat words.txt&
 false command
 history
-ls -u -o
+ls -u -o&
 ls -o -u
 ls -x
 ls -u -o
+mkdir newdir
+mkdir newdir
 cd idek
-mkdir newdir
 ls
-mkdir newdir
-cp test2.in ./newdir/test2.in
 ls ./newdir
 rmdir newdir
-sleep 10 
+sleep 10 &
 ps 
 who
 sleep 10

@@ -25,8 +25,8 @@ int is_background(char* argv[MAX_ARGS]);
 void activate(char* command);
 int main(void)
 {
-    //close(2);
-    //dup(1);
+    close(2);
+    dup(1);
     char command[BUFFER_SIZE];
     node* head = NULL;
     while (1)
@@ -37,6 +37,7 @@ int main(void)
         if(strncmp(command, "exit", 4) == 0)
             break;
         command[strlen(command)-1] = '\0';
+        head = cmd_push(head,command);
         if(strncmp(command, "history", 7) == 0)
             print_list(head);
         else activate(command);
