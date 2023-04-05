@@ -57,16 +57,16 @@ void remove_value(list *list, int value)
 void print_list(list *list)
 {
   if(!list) exit(1);
-  pthread_mutex_lock(list->lock);
+  pthread_mutex_lock(&list->lock);
   node *current = list->head;
-  pthread_mutex_unlock(list->lock);
+  pthread_mutex_unlock(&list->lock);
   int value;
   while (current)
   {
-    pthread_mutex_lock(current->lock);
+    pthread_mutex_lock(&current->lock);
     value = current->value;
     next = current->next;
-    pthread_mutex_unlock(current->lock);
+    pthread_mutex_unlock(&current->lock);
     fprintf(stdout, "%d ", value);
     current = next;
   }
@@ -77,17 +77,17 @@ void count_list(list *list, int (*predicate)(int))
 {
   if(!list) exit(1);
   int count = 0; // DO NOT DELETE
-  pthread_mutex_lock(list->lock);
+  pthread_mutex_lock(&list->lock);
   node* current = list->head;
-  pthread_mutex_unlock(list->lock);
+  pthread_mutex_unlock(&list->lock);
   node *next = NULL;
   int value;
   while (current)
   {
-    pthread_mutex_lock(current->lock);
+    pthread_mutex_lock(&current->lock);
     value = current->value;
     next = current->next;
-    pthread_mutex_unlock(current->lock);
+    pthread_mutex_unlock(&current->lock);
     current = next;
     count += predicate(value);
   }
