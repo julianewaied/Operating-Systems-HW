@@ -41,12 +41,45 @@ list *create_list()
 
 void delete_list(list *list)
 {
-  // add code here
+   if(list->head==NULL){
+    free(list);
+    return;
+  }
+  
+  node* head=list->head;
+  list->head=list->head->next;
+  
+  free(head);
+  delete_list(list);
 }
 
 void insert_value(list *list, int value)
 {
-  // add code here
+  pthread_mutex_lock(list->lock);
+  node* current=list->head;
+  pthread_mutex_unlock(list->lock);
+
+  insert_value_node(current);
+  
+}
+
+void insert_value_node(node* current, int value){
+
+  pthread_mutex_lock(current->lock);
+
+  if(value<=current->value){
+
+
+    return;
+  }
+
+  node* next=current->next;
+
+  pthread_mutex_unlock(current);
+
+  insert_value_node()
+
+
 }
 
 void remove_value(list *list, int value)
