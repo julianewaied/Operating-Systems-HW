@@ -189,7 +189,7 @@ void count_list(list *list, int (*predicate)(int))
   if(!list) exit(1);
   int count = 0; // DO NOT DELETE
   pthread_mutex_lock(&list->lock);
-  node* current = list->head;
+  node* current = list->head->next;
   pthread_mutex_unlock(&list->lock);
   node *next = NULL;
   int value;
@@ -200,7 +200,7 @@ void count_list(list *list, int (*predicate)(int))
     next = current->next;
     pthread_mutex_unlock(&current->lock);
     current = next;
-    count += predicate(value);
+    if(next)count += predicate(value);
   }
   printf("%d items were counted\n", count); // DO NOT DELETE
   //free(threads); this is old right? idk what its doing here
@@ -214,6 +214,9 @@ void unlock(node* node){
   pthread_mutex_unlock(&(node->lock));
 }
 
+int greater_10(int val){
+  return val>10;
+}
 
 int main(){
   list* list=create_list();
@@ -224,6 +227,9 @@ int main(){
   remove_value(list,7);
   remove_value(list,19);
   remove_value(list,19);
+
+  count_list(list,greater_10);
+  
   print_list(list);
   delete_list(list);
   
