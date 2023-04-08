@@ -58,7 +58,7 @@ void delete_list(list *list)
   while(list->head){
     node* head=list->head;
     
-    lock(head->next);
+    if(head->next)lock(head->next);
     list->head=list->head->next;
   
     free(head);
@@ -118,7 +118,7 @@ node* make_node(int value,node* next){
   new_node->value=value;
   new_node->next=next;
 
-  //pthread_mutex_init(&(new_node->lock), NULL);
+  pthread_mutex_init(&(new_node->lock), NULL);
 
   return new_node;
 
@@ -218,7 +218,7 @@ int greater_10(int val){
   return val>10;
 }
 
-int main(){
+/*int main(){
   list* list=create_list();
   insert_value(list,15);
   insert_value(list,7);
@@ -234,4 +234,4 @@ int main(){
   delete_list(list);
   
 
-}
+}*/
