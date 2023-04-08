@@ -169,7 +169,7 @@ void print_list(list *list)
 {
   if(!list) exit(1);
   pthread_mutex_lock(&list->lock);
-  node *current = list->head;
+  node *current = list->head->next;
   pthread_mutex_unlock(&list->lock);
   int value;
   while (current)
@@ -178,7 +178,7 @@ void print_list(list *list)
     value = current->value;
     node* next = current->next;
     pthread_mutex_unlock(&current->lock);
-    fprintf(stdout, "%d ", value);
+    if(next)fprintf(stdout, "%d ", value);
     current = next;
   }
   printf("\n"); // DO NOT DELETE
@@ -226,5 +226,6 @@ int main(){
   remove_value(list,19);
   print_list(list);
   delete_list(list);
+  
 
 }
