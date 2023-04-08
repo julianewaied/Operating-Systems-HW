@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "concurrent_list.h"
+
+node* make_node(int value,node* next);
+void unlock(node* node);
+void lock(node* node);
+
 int *list_arr;
 int in_read;
 int out_read;
@@ -11,7 +16,6 @@ struct node
   // make it double linked list to make implementation easier :)
   int value;
   node *next;
-  node *previous;
   pthread_mutex_t lock;
   // add more fields
 };
@@ -34,51 +38,89 @@ void print_node(node *node)
 
 list *create_list()
 {
-  list *l = malloc(sizeof(list))
-  l->head = NULL;
+  list *l = malloc(sizeof(list));
+
+  node* last=make_node(INT_MAX,NULL);
+  node* first=make_node(-INT_MAX,last);
+  
+  l->head = first;
+  pthread_mutex_init(&(l->lock), NULL);
   return l;
 }
 
 void delete_list(list *list)
 {
-   if(list->head==NULL){
-    free(list);
-    return;
+
+  //we want to delete the list, so we will keep it locked until it is deleted.
+  pthread_mutex_lock(&(list->lock));
+  lock(list->head);
+
+  while(list->head){
+    node* head=list->head;
+    
+    lock(head->next);
+    list->head=list->head->next;
+  
+    free(head);
   }
   
-  node* head=list->head;
-  list->head=list->head->next;
   
-  free(head);
-  delete_list(list);
+  
+  free(list);
+  return;
+
 }
 
 void insert_value(list *list, int value)
 {
-  pthread_mutex_lock(list->lock);
-  node* current=list->head;
-  pthread_mutex_unlock(list->lock);
+  node *prev, *curr;
 
-  insert_value_node(current);
+  //init prev and curr
   
-}
+  pthread_mutex_lock(&(list->lock));
+  prev=list->head;
+  pthread_mutex_unlock(&(list->lock));
 
-void insert_value_node(node* current, int value){
+  lock(prev);
+  curr=prev->next;
+  lock(curr);
+  
 
-  pthread_mutex_lock(current->lock);
+  while(curr){
+    if((prev->value)<=value && value<= (curr->value)){
+      //insert
+      node* new_node=make_node(value,curr);
+      prev->next=new_node;
 
-  if(value<=current->value){
+      unlock(curr);
+      unlock(prev);
+      
+      return;
+    }
 
+    //move prev and curr
 
-    return;
+    if(curr->next) lock(curr->next);
+    node* p=prev;
+    prev=curr;
+    curr=curr->next;
+    unlock(p);
   }
 
-  node* next=current->next;
+  unlock(prev);
 
-  pthread_mutex_unlock(current);
+  return;
 
-  insert_value_node()
+}
 
+node* make_node(int value,node* next){
+  node* new_node=(node*)malloc(sizeof(node));
+  new_node->value=value;
+  new_node->next=next;
+
+  //pthread_mutex_init(&(new_node->lock), NULL);
+
+  return new_node;
 
 }
 
@@ -98,7 +140,7 @@ void print_list(list *list)
   {
     pthread_mutex_lock(&current->lock);
     value = current->value;
-    next = current->next;
+    node* next = current->next;
     pthread_mutex_unlock(&current->lock);
     fprintf(stdout, "%d ", value);
     current = next;
@@ -125,5 +167,25 @@ void count_list(list *list, int (*predicate)(int))
     count += predicate(value);
   }
   printf("%d items were counted\n", count); // DO NOT DELETE
-  free(threads)
+  //free(threads); this is old right? idk what its doing here
+}
+
+void lock(node* node){
+  pthread_mutex_lock(&(node->lock));
+}
+
+void unlock(node* node){
+  pthread_mutex_unlock(&(node->lock));
+}
+
+
+int main(){
+  list* list=create_list();
+  insert_value(list,15);
+  insert_value(list,7);
+  insert_value(list,20);
+  insert_value(list,1);
+  print_list(list);
+  delete_list(list);
+
 }
