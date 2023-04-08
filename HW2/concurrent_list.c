@@ -126,7 +126,43 @@ node* make_node(int value,node* next){
 
 void remove_value(list *list, int value)
 {
-  // add code here
+  node *prev, *curr;
+
+  //init prev and curr
+  
+  pthread_mutex_lock(&(list->lock));
+  prev=list->head;
+  pthread_mutex_unlock(&(list->lock));
+
+  lock(prev);
+  curr=prev->next;
+  lock(curr);
+  
+
+  while(curr){
+    if(value==curr->value){
+      //remove curr
+
+      prev->next=curr->next;
+      free(curr);
+
+      unlock(prev);
+      
+      return;
+    }
+
+    //move prev and curr
+
+    if(curr->next) lock(curr->next);
+    node* p=prev;
+    prev=curr;
+    curr=curr->next;
+    unlock(p);
+  }
+
+  unlock(prev);
+
+  return;
 }
 
 void print_list(list *list)
@@ -185,6 +221,9 @@ int main(){
   insert_value(list,7);
   insert_value(list,20);
   insert_value(list,1);
+  remove_value(list,7);
+  remove_value(list,19);
+  remove_value(list,19);
   print_list(list);
   delete_list(list);
 
