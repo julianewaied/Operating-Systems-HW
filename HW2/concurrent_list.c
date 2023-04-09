@@ -13,11 +13,9 @@ int in_read;
 int out_read;
 struct node
 {
-  // make it double linked list to make implementation easier :)
   int value;
   node *next;
   pthread_mutex_t lock;
-  // add more fields
 };
 
 struct list
@@ -36,6 +34,17 @@ void print_node(node *node)
   }
 }
 
+// checked
+void lock(node* node){
+  if(node)
+  pthread_mutex_lock(&(node->lock));
+}
+// checked
+void unlock(node* node){
+  if(node)
+  pthread_mutex_unlock(&(node->lock));
+}
+// checked
 list *create_list()
 {
   list *l = malloc(sizeof(list));
@@ -47,54 +56,44 @@ list *create_list()
   pthread_mutex_init(&(l->lock), NULL);
   return l;
 }
-
+// problematic - you need to unlock before freeing
 void delete_list(list *list)
 {
-
   //we want to delete the list, so we will keep it locked until it is deleted.
   pthread_mutex_lock(&(list->lock));
   lock(list->head);
-
   while(list->head){
     node* head=list->head;
+<<<<<<< Updated upstream
     
     if(head->next)lock(head->next);
+=======
+    lock(head->next);
+>>>>>>> Stashed changes
     list->head=list->head->next;
-  
     free(head);
   }
-  
-  
-  
   free(list);
   return;
-
 }
-
+// yet to check!
 void insert_value(list *list, int value)
 {
   node *prev, *curr;
-
   //init prev and curr
-  
   pthread_mutex_lock(&(list->lock));
   prev=list->head;
   pthread_mutex_unlock(&(list->lock));
-
   lock(prev);
   curr=prev->next;
   lock(curr);
-  
-
   while(curr){
     if((prev->value)<=value && value<= (curr->value)){
       //insert
       node* new_node=make_node(value,curr);
       prev->next=new_node;
-
       unlock(curr);
       unlock(prev);
-      
       return;
     }
 
@@ -112,7 +111,7 @@ void insert_value(list *list, int value)
   return;
 
 }
-
+// checked!
 node* make_node(int value,node* next){
   node* new_node=(node*)malloc(sizeof(node));
   new_node->value=value;
@@ -123,7 +122,7 @@ node* make_node(int value,node* next){
   return new_node;
 
 }
-
+// yet to check
 void remove_value(list *list, int value)
 {
   node *prev, *curr;
@@ -164,7 +163,7 @@ void remove_value(list *list, int value)
 
   return;
 }
-
+// to be updated
 void print_list(list *list)
 {
   if(!list) exit(1);
@@ -183,7 +182,7 @@ void print_list(list *list)
   }
   printf("\n"); // DO NOT DELETE
 }
-
+// to be updated!
 void count_list(list *list, int (*predicate)(int))
 {
   if(!list) exit(1);
@@ -206,14 +205,7 @@ void count_list(list *list, int (*predicate)(int))
   //free(threads); this is old right? idk what its doing here
 }
 
-void lock(node* node){
-  pthread_mutex_lock(&(node->lock));
-}
-
-void unlock(node* node){
-  pthread_mutex_unlock(&(node->lock));
-}
-
+// this doesn't work!! you gotta get and return void*
 int greater_10(int val){
   return val>10;
 }
