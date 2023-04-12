@@ -65,7 +65,7 @@ void delete_list(list *list)
   }
   
   
-  
+  pthread_mutex_unlock(&(list->lock));
   free(list);
   return;
 
