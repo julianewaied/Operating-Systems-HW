@@ -37,17 +37,22 @@ void print_node(node *node)
 }
 
 // gets a list and returns the first number after the -infinity node safely with locks
-node* getFirst(list* l)
+node* getFirst(list* list)
 {
-  // function gets a list and returns the first node after the -infinity
-  if(!list) exit(1);
-  pthread_mutex_lock(&list->lock);
+  if(!list) 
+   return NULL;
+  pthread_mutex_lock(&(list->lock));
   node *current = list->head;
-  if(!current) exit(1);
+  if(!current)
+  {
+    pthread_mutex_unlock(&list->lock);
+    return NULL;
+  } 
   lock(current);
   node* p = current->next;
   unlock(current);
   pthread_mutex_unlock(&list->lock);
+  return p;
 }
 
 // locks a node if it is no NULL
@@ -77,6 +82,7 @@ list *create_list()
 void delete_list(list *list)
 {
   //we want to delete the list, so we will keep it locked until it is deleted.
+  if(!list) return;
   pthread_mutex_lock(&(list->lock));
   lock(list->head);
   while(list->head)
@@ -105,6 +111,7 @@ node* make_node(int value,node* next){
 // inserts the value in its sorted position to list
 void insert_value(list *list, int value)
 {
+  if(!list) return;
   node *prev, *curr;
   //init prev and curr
   pthread_mutex_lock(&(list->lock));
@@ -115,6 +122,12 @@ void insert_value(list *list, int value)
   lock(curr);
   while(1)
   {
+    if(!curr)
+    {
+      unlock(curr);
+      unlock(prev);
+      return;
+    }
     if((prev->value)<=value && value<= (curr->value)){
       //insert
       node* new_node=make_node(value,curr);
@@ -141,6 +154,7 @@ void insert_value(list *list, int value)
 void remove_value(list *list, int value)
 {
   node *prev, *curr;
+  if(!list) return;
   //init prev and curr
   pthread_mutex_lock(&(list->lock));
   prev=list->head;
@@ -151,6 +165,13 @@ void remove_value(list *list, int value)
   
 
   while(curr){
+    // check for corruption
+    if(!prev || !curr) 
+    {
+      unlock(prev);
+      unlock(curr);
+      return;
+    }
     if(value==curr->value){
       //remove curr
 
@@ -180,6 +201,7 @@ void remove_value(list *list, int value)
 void print_list(list *list)
 {
   node* current = getFirst(list);
+  if(!current) return;
   lock(current);                        // loop assumption: current is locked
   int value;
   while (current->value<INT_MAX)
@@ -187,7 +209,7 @@ void print_list(list *list)
     value = current->value;
     lock(current->next);
     node* next = current->next;
-    unlock(current)
+    unlock(current);
     fprintf(stdout, "%d ", value);
     current = next;
   }
@@ -198,20 +220,22 @@ void print_list(list *list)
 // prints the number of values in list where predicate returns 1
 void count_list(list *list, int (*predicate)(int))
 {
-  if(!list) exit(1);
+  if(!list) return;
   int count = 0; // DO NOT DELETE
-  node* current = getFirst(list)
-  lock(current)
+  node* current = getFirst(list);
+  if(!current) return;
+  lock(current);
   node *next = NULL;
   int value;
   while (current->value<INT_MAX)
   {
-    lock(current->next)
+    lock(current->next);
     value = current->value;
     next = current->next;
     unlock(current);
     current = next;
     count += predicate(value);
   }
+  unlock(current);
   printf("%d items were counted\n", count); // DO NOT DELETE
 }
