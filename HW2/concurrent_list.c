@@ -50,7 +50,7 @@ list *create_list()
   list *l = malloc(sizeof(list));
 
   node* last=make_node(INT_MAX,NULL);
-  node* first=make_node(-INT_MAX,last);
+  node* first=make_node(INT_MIN,last); 
   
   l->head = first;
   pthread_mutex_init(&(l->lock), NULL);
@@ -167,17 +167,19 @@ void print_list(list *list)
   node *current = list->head;
   if(!current) exit(1);
   lock(current);
-  lock(current->next);
+  lock(current->next); // why lock here and then later use an if to make sure it isnt locked? u already have 
+                      //the first node locked so u dont need to lock the one after it
   pthread_mutex_unlock(&list->lock);
   int value;
   while (current->value<INT_MAX)
   {
     value = current->value;
     // the if condition is to make sure we're not locking twice
-    if(value>INT_MIN&& value<INT_MAX) lock(current->next);
+    if(value>INT_MIN&& value<INT_MAX) lock(current->next); //here the first case value=min u didnt need to lock the second node
+                                                            //and value cant be INT_MAX anyways becuase then u dont enter the loop so this if statement does nothing
     node* next = current->next;
     unlock(current)
-    if(next)fprintf(stdout, "%d ", value);
+    if(next)fprintf(stdout, "%d ", value); // here the first one will just get printed 
     current = next;
   }
   printf("\n"); // DO NOT DELETE
@@ -189,7 +191,7 @@ void count_list(list *list, int (*predicate)(int))
   int count = 0; // DO NOT DELETE
   pthread_mutex_lock(&list->lock);
   // I suspect this might lead to a problem but I'll think abt it
-  node* current = list->head->next;
+  node* current = list->head->next; //this does actually lead to problems
   lock(current)
   pthread_mutex_unlock(&list->lock);
   node *next = NULL;
