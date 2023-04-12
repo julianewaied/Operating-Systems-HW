@@ -13,11 +13,9 @@ int in_read;
 int out_read;
 struct node
 {
-  // make it double linked list to make implementation easier :)
   int value;
   node *next;
   pthread_mutex_t lock;
-  // add more fields
 };
 
 struct list
@@ -36,6 +34,17 @@ void print_node(node *node)
   }
 }
 
+// checked
+void lock(node* node){
+  if(node)
+  pthread_mutex_lock(&(node->lock));
+}
+// checked
+void unlock(node* node){
+  if(node)
+  pthread_mutex_unlock(&(node->lock));
+}
+// checked
 list *create_list()
 {
   list *l = malloc(sizeof(list));
@@ -47,20 +56,17 @@ list *create_list()
   pthread_mutex_init(&(l->lock), NULL);
   return l;
 }
-
+// problematic - you need to unlock before freeing
 void delete_list(list *list)
 {
-
   //we want to delete the list, so we will keep it locked until it is deleted.
   pthread_mutex_lock(&(list->lock));
   lock(list->head);
-
   while(list->head){
     node* head=list->head;
     
-    if(head->next)lock(head->next);
+    lock(head->next);
     list->head=list->head->next;
-  
     free(head);
   }
   
@@ -68,33 +74,33 @@ void delete_list(list *list)
   pthread_mutex_unlock(&(list->lock));
   free(list);
   return;
-
 }
-
+// checked!
+node* make_node(int value,node* next){
+  node* new_node=(node*)malloc(sizeof(node));
+  new_node->value=value;
+  new_node->next=next;
+  pthread_mutex_init(&(new_node->lock), NULL);
+  return new_node;
+}
+// yet to check!
 void insert_value(list *list, int value)
 {
   node *prev, *curr;
-
   //init prev and curr
-  
   pthread_mutex_lock(&(list->lock));
   prev=list->head;
   pthread_mutex_unlock(&(list->lock));
-
   lock(prev);
   curr=prev->next;
   lock(curr);
-  
-
   while(curr){
     if((prev->value)<=value && value<= (curr->value)){
       //insert
       node* new_node=make_node(value,curr);
       prev->next=new_node;
-
       unlock(curr);
       unlock(prev);
-      
       return;
     }
 
@@ -112,18 +118,7 @@ void insert_value(list *list, int value)
   return;
 
 }
-
-node* make_node(int value,node* next){
-  node* new_node=(node*)malloc(sizeof(node));
-  new_node->value=value;
-  new_node->next=next;
-
-  pthread_mutex_init(&(new_node->lock), NULL);
-
-  return new_node;
-
-}
-
+// yet to check
 void remove_value(list *list, int value)
 {
   node *prev, *curr;
@@ -164,56 +159,54 @@ void remove_value(list *list, int value)
 
   return;
 }
-
+// to be checked
 void print_list(list *list)
 {
   if(!list) exit(1);
   pthread_mutex_lock(&list->lock);
-  node *current = list->head->next;
+  node *current = list->head;
+  if(!current) exit(1);
+  lock(current);
+  lock(current->next);
   pthread_mutex_unlock(&list->lock);
   int value;
-  while (current)
+  while (current->value<INT_MAX)
   {
-    pthread_mutex_lock(&current->lock);
     value = current->value;
+    // the if condition is to make sure we're not locking twice
+    if(value>INT_MIN&& value<INT_MAX) lock(current->next);
     node* next = current->next;
-    pthread_mutex_unlock(&current->lock);
+    unlock(current)
     if(next)fprintf(stdout, "%d ", value);
     current = next;
   }
   printf("\n"); // DO NOT DELETE
 }
-
+// to be checked
 void count_list(list *list, int (*predicate)(int))
 {
   if(!list) exit(1);
   int count = 0; // DO NOT DELETE
   pthread_mutex_lock(&list->lock);
+  // I suspect this might lead to a problem but I'll think abt it
   node* current = list->head->next;
+  lock(current)
   pthread_mutex_unlock(&list->lock);
   node *next = NULL;
   int value;
   while (current)
   {
-    pthread_mutex_lock(&current->lock);
+    if(current->value<INT_MAX) lock(current->next)
     value = current->value;
     next = current->next;
-    pthread_mutex_unlock(&current->lock);
+    unlock(current);
     current = next;
     if(next)count += predicate(value);
   }
   printf("%d items were counted\n", count); // DO NOT DELETE
-  //free(threads); this is old right? idk what its doing here
 }
 
-void lock(node* node){
-  pthread_mutex_lock(&(node->lock));
-}
-
-void unlock(node* node){
-  pthread_mutex_unlock(&(node->lock));
-}
-
+// this doesn't work!! you gotta get and return void*
 int greater_10(int val){
   return val>10;
 }
