@@ -34,37 +34,52 @@ void print_node(node *node)
   }
 }
 
-// checked
+// you can use this as well
+node* getFirst(list* l)
+{
+  // function gets a list and returns the first node after the -infinity
+  if(!list) exit(1);
+  pthread_mutex_lock(&list->lock);
+  node *current = list->head;
+  if(!current) exit(1);
+  lock(current);
+  node* p = current->next;
+  unlock(current);
+  pthread_mutex_unlock(&list->lock);
+}
+
+// checked!
 void lock(node* node){
   if(node)
   pthread_mutex_lock(&(node->lock));
 }
-// checked
+
+// checked!
 void unlock(node* node){
   if(node)
   pthread_mutex_unlock(&(node->lock));
 }
-// checked
+
+// checked!
 list *create_list()
 {
   list *l = malloc(sizeof(list));
-
   node* last=make_node(INT_MAX,NULL);
   node* first=make_node(INT_MIN,last); 
-  
   l->head = first;
   pthread_mutex_init(&(l->lock), NULL);
   return l;
 }
-// problematic - you need to unlock before freeing
+
+// checked!
 void delete_list(list *list)
 {
   //we want to delete the list, so we will keep it locked until it is deleted.
   pthread_mutex_lock(&(list->lock));
   lock(list->head);
-  while(list->head){
+  while(list->head)
+  {
     node* head=list->head;
-    
     lock(head->next);
     list->head=list->head->next;
     free(head);
@@ -75,6 +90,7 @@ void delete_list(list *list)
   free(list);
   return;
 }
+
 // checked!
 node* make_node(int value,node* next){
   node* new_node=(node*)malloc(sizeof(node));
@@ -83,6 +99,7 @@ node* make_node(int value,node* next){
   pthread_mutex_init(&(new_node->lock), NULL);
   return new_node;
 }
+
 // yet to check!
 void insert_value(list *list, int value)
 {
@@ -118,6 +135,7 @@ void insert_value(list *list, int value)
   return;
 
 }
+
 // yet to check
 void remove_value(list *list, int value)
 {
@@ -159,74 +177,43 @@ void remove_value(list *list, int value)
 
   return;
 }
-// to be checked
+
+// checked!
 void print_list(list *list)
 {
-  if(!list) exit(1);
-  pthread_mutex_lock(&list->lock);
-  node *current = list->head;
-  if(!current) exit(1);
-  lock(current);
-  lock(current->next); // why lock here and then later use an if to make sure it isnt locked? u already have 
-                      //the first node locked so u dont need to lock the one after it
-  pthread_mutex_unlock(&list->lock);
+  node* current = getFirst(list);
+  lock(current);                        // loop assumption: current is locked
   int value;
   while (current->value<INT_MAX)
   {
     value = current->value;
-    // the if condition is to make sure we're not locking twice
-    if(value>INT_MIN&& value<INT_MAX) lock(current->next); //here the first case value=min u didnt need to lock the second node
-                                                            //and value cant be INT_MAX anyways becuase then u dont enter the loop so this if statement does nothing
+    lock(current->next);
     node* next = current->next;
     unlock(current)
-    if(next)fprintf(stdout, "%d ", value); // here the first one will just get printed 
+    fprintf(stdout, "%d ", value);
     current = next;
   }
-  printf("\n"); // DO NOT DELETE
+  unlock(current);                      // the +infty node must be unlocked
+  printf("\n");                         // DO NOT DELETE
 }
-// to be checked
+
+// checked!
 void count_list(list *list, int (*predicate)(int))
 {
   if(!list) exit(1);
   int count = 0; // DO NOT DELETE
-  pthread_mutex_lock(&list->lock);
-  // I suspect this might lead to a problem but I'll think abt it
-  node* current = list->head->next; //this does actually lead to problems
+  node* current = getFirst(list)
   lock(current)
-  pthread_mutex_unlock(&list->lock);
   node *next = NULL;
   int value;
-  while (current)
+  while (current->value<INT_MAX)
   {
-    if(current->value<INT_MAX) lock(current->next)
+    lock(current->next)
     value = current->value;
     next = current->next;
     unlock(current);
     current = next;
-    if(next)count += predicate(value);
+    count += predicate(value);
   }
   printf("%d items were counted\n", count); // DO NOT DELETE
 }
-
-// this doesn't work!! you gotta get and return void*
-int greater_10(int val){
-  return val>10;
-}
-
-/*int main(){
-  list* list=create_list();
-  insert_value(list,15);
-  insert_value(list,7);
-  insert_value(list,20);
-  insert_value(list,1);
-  remove_value(list,7);
-  remove_value(list,19);
-  remove_value(list,19);
-
-  count_list(list,greater_10);
-  
-  print_list(list);
-  delete_list(list);
-  
-
-}*/
