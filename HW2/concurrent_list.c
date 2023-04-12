@@ -7,6 +7,7 @@
 node* make_node(int value,node* next);
 void unlock(node* node);
 void lock(node* node);
+node* getFirst(list*);
 
 int *list_arr;
 int in_read;
@@ -25,6 +26,7 @@ struct list
   pthread_mutex_t lock;
 };
 
+// prints a node data
 void print_node(node *node)
 {
   // DO NOT DELETE
@@ -34,7 +36,7 @@ void print_node(node *node)
   }
 }
 
-// you can use this as well
+// gets a list and returns the first number after the -infinity node safely with locks
 node* getFirst(list* l)
 {
   // function gets a list and returns the first node after the -infinity
@@ -48,19 +50,19 @@ node* getFirst(list* l)
   pthread_mutex_unlock(&list->lock);
 }
 
-// checked!
+// locks a node if it is no NULL
 void lock(node* node){
   if(node)
   pthread_mutex_lock(&(node->lock));
 }
 
-// checked!
+// unlocks a node if it is not NULL
 void unlock(node* node){
   if(node)
   pthread_mutex_unlock(&(node->lock));
 }
 
-// checked!
+// creates an empty list including only +infinity and -infinity
 list *create_list()
 {
   list *l = malloc(sizeof(list));
@@ -71,7 +73,7 @@ list *create_list()
   return l;
 }
 
-// checked!
+// deletes the whole list
 void delete_list(list *list)
 {
   //we want to delete the list, so we will keep it locked until it is deleted.
@@ -91,7 +93,7 @@ void delete_list(list *list)
   return;
 }
 
-// checked!
+// makes a node and intiates its lock
 node* make_node(int value,node* next){
   node* new_node=(node*)malloc(sizeof(node));
   new_node->value=value;
@@ -100,7 +102,7 @@ node* make_node(int value,node* next){
   return new_node;
 }
 
-// yet to check!
+// inserts the value in its sorted position to list
 void insert_value(list *list, int value)
 {
   node *prev, *curr;
@@ -111,7 +113,8 @@ void insert_value(list *list, int value)
   lock(prev);
   curr=prev->next;
   lock(curr);
-  while(curr){
+  while(1)
+  {
     if((prev->value)<=value && value<= (curr->value)){
       //insert
       node* new_node=make_node(value,curr);
@@ -123,30 +126,25 @@ void insert_value(list *list, int value)
 
     //move prev and curr
 
-    if(curr->next) lock(curr->next);
+    lock(curr->next);
     node* p=prev;
     prev=curr;
     curr=curr->next;
     unlock(p);
   }
-
   unlock(prev);
-
   return;
 
 }
 
-// yet to check
+// removes first appearance of value from list
 void remove_value(list *list, int value)
 {
   node *prev, *curr;
-
   //init prev and curr
-  
   pthread_mutex_lock(&(list->lock));
   prev=list->head;
   pthread_mutex_unlock(&(list->lock));
-
   lock(prev);
   curr=prev->next;
   lock(curr);
@@ -166,7 +164,7 @@ void remove_value(list *list, int value)
 
     //move prev and curr
 
-    if(curr->next) lock(curr->next);
+    lock(curr->next);
     node* p=prev;
     prev=curr;
     curr=curr->next;
@@ -178,7 +176,7 @@ void remove_value(list *list, int value)
   return;
 }
 
-// checked!
+// prints the list serially 
 void print_list(list *list)
 {
   node* current = getFirst(list);
@@ -197,7 +195,7 @@ void print_list(list *list)
   printf("\n");                         // DO NOT DELETE
 }
 
-// checked!
+// prints the number of values in list where predicate returns 1
 void count_list(list *list, int (*predicate)(int))
 {
   if(!list) exit(1);
