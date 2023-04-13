@@ -43,6 +43,7 @@ node* getFirst(list* list)
    return NULL;
   pthread_mutex_lock(&(list->lock));
   node *current = list->head;
+  pthread_mutex_unlock(&list->lock);
   if(!current)
   {
     pthread_mutex_unlock(&list->lock);
@@ -50,8 +51,9 @@ node* getFirst(list* list)
   } 
   lock(current);
   node* p = current->next;
+  lock(p);
   unlock(current);
-  pthread_mutex_unlock(&list->lock);
+  
   return p;
 }
 
@@ -202,7 +204,7 @@ void print_list(list *list)
 {
   node* current = getFirst(list);
   if(!current) return;
-  lock(current);                        // loop assumption: current is locked
+                          
   int value;
   while (current->value<INT_MAX)
   {
@@ -225,7 +227,6 @@ void count_list(list *list, int (*predicate)(int))
   int count = 0; // DO NOT DELETE
   node* current = getFirst(list);
   if(!current) return;
-  lock(current);
   node *next = NULL;
   int value;
   while (current->value<INT_MAX)
