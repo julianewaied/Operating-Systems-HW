@@ -206,11 +206,12 @@ void print_list(list *list)
   int value;
   while (current->value<INT_MAX)
   {
+    printf("test in core");
     value = current->value;
     lock(current->next);
     node* next = current->next;
     unlock(current);
-    fprintf(stdout, "%d ", value);
+    printf("%d ", value);
     current = next;
   }
   unlock(current);                      // the +infty node must be unlocked

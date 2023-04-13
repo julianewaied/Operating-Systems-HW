@@ -92,8 +92,10 @@ int execute_command(char* command, int value)
 	}
 	else if(strcmp(command, "print_list") == 0)
 	{
-		pthread_create(&threads[thread_count], NULL, print_list_task, NULL);
-		thread_count++;
+		// pthread_create(&threads[thread_count], NULL, print_list_task, NULL);
+		// thread_count++;
+		printf("test in shell");
+		print_list(mylist);
 	}		
 	else if(strcmp(command, "insert_value") == 0)
 	{	

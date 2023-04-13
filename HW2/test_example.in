@@ -1,0 +1,8 @@
+create_list
+insert_value 1
+insert_value -1
+insert_value 0
+print_list
+count_greater 0
+delete_list
+exit
