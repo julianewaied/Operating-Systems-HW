@@ -13,6 +13,7 @@
 #define CMD_BUFFER_SIZE 100
 #define MAX_THREAD_COUNT 252
 
+
 char* delimiters = " \n\r\t";
 char* string_delimiter = "\"";
 char command[CMD_BUFFER_SIZE];
@@ -92,10 +93,8 @@ int execute_command(char* command, int value)
 	}
 	else if(strcmp(command, "print_list") == 0)
 	{
-		// pthread_create(&threads[thread_count], NULL, print_list_task, NULL);
-		// thread_count++;
-		printf("test in shell");
-		print_list(mylist);
+		pthread_create(&threads[thread_count], NULL, print_list_task, NULL);
+		thread_count++;
 	}		
 	else if(strcmp(command, "insert_value") == 0)
 	{	
@@ -139,7 +138,6 @@ int main(int argc, const char** argv)
         {
             break;
         }
-
         int value;
         parse_command(command, parsed_command, &value);
         execute_command(parsed_command, value);

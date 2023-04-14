@@ -204,11 +204,9 @@ void print_list(list *list)
 {
   node* current = getFirst(list);
   if(!current) return;
-                          
   int value;
   while (current->value<INT_MAX)
   {
-    printf("test in core");
     value = current->value;
     lock(current->next);
     node* next = current->next;

@@ -1,6 +1,5 @@
 typedef struct node node;
 typedef struct list list;
-
 list* create_list();
 void delete_list(list* list);
 void print_list(list* list);
