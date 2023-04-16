@@ -3,18 +3,23 @@
     # inserting values 0-1000
     for i in range(0,101):
         f.write('insert_value '+str(i)+'\n')
-    # prints 500
+    
+    f.write('join\n')
+    # prints 50
     f.write('count_greater 50\n')
     for i in range(0,101):
         f.write('remove_value '+str(i)+'\n')
         f.write('insert_value '+str(i)+'\n')
-    # prints 500
+    f.write('join\n')
+    # prints 50
     f.write('count_greater 50\n')
-    for i in range(20,101):
+    for i in range(21,101):
         f.write('remove_value '+str(i)+'\n')
+    f.write('join\n')
     f.write('print_list\n')
-    for i in range(11,19):
+    for i in range(11,21):
         f.write('remove_value '+str(i)+'\n')
+    f.write('join\n')
     f.write('print_list\n')
     f.write('delete_list\n')
     f.write('join\n')

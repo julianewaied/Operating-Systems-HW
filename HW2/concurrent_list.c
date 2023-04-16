@@ -202,6 +202,7 @@ void remove_value(list *list, int value)
 // prints the list serially 
 void print_list(list *list)
 {
+  if(!list) return;
   node* current = getFirst(list);
   if(!current) return;
   int value;

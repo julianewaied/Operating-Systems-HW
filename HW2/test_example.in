@@ -100,6 +100,7 @@ insert_value 97
 insert_value 98
 insert_value 99
 insert_value 100
+join
 count_greater 50
 remove_value 0
 insert_value 0
@@ -303,8 +304,8 @@ remove_value 99
 insert_value 99
 remove_value 100
 insert_value 100
+join
 count_greater 50
-remove_value 20
 remove_value 21
 remove_value 22
 remove_value 23
@@ -385,6 +386,7 @@ remove_value 97
 remove_value 98
 remove_value 99
 remove_value 100
+join
 print_list
 remove_value 11
 remove_value 12
@@ -394,6 +396,9 @@ remove_value 15
 remove_value 16
 remove_value 17
 remove_value 18
+remove_value 19
+remove_value 20
+join
 print_list
 delete_list
 join

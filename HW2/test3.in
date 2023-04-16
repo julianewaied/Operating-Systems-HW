@@ -1,0 +1,17 @@
+create_list
+insert_value 1
+insert_value 2
+remove_value 2
+remove_value 2
+delete_list
+insert_value 2
+remove_value 2
+print_list
+delete_list
+create_list
+insert_value 1
+insert_value 2
+print_list
+count_greater
+delete_list
+exit
