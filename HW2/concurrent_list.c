@@ -73,6 +73,7 @@ void unlock(node* node){
 list *create_list()
 {
   list *l = malloc(sizeof(list));
+  if(!l) exit(1);
   node* last=make_node(INT_MAX,NULL);
   node* first=make_node(INT_MIN,last); 
   l->head = first;
@@ -104,6 +105,7 @@ void delete_list(list *list)
 // makes a node and intiates its lock
 node* make_node(int value,node* next){
   node* new_node=(node*)malloc(sizeof(node));
+  if(!new_node) exit(1); 
   new_node->value=value;
   new_node->next=next;
   pthread_mutex_init(&(new_node->lock), NULL);
