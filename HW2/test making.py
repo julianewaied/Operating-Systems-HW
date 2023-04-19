@@ -15,8 +15,8 @@
     f.write('count_greater 50\n')
     for i in range(21,101):
         f.write('remove_value '+str(i)+'\n')
-    f.write('join\n')
     f.write('print_list\n')
+    f.write('join\n')
     for i in range(11,21):
         f.write('remove_value '+str(i)+'\n')
     f.write('join\n')
