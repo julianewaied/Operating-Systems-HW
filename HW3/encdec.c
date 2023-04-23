@@ -17,7 +17,7 @@
 #define MODULE_NAME "encdec"
 
 MODULE_LICENSE("GPL");
-MODULE_AUTHOR("YOUR NAME");
+MODULE_AUTHOR("Us Probably");
 
 int 	encdec_open(struct inode *inode, struct file *filp);
 int 	encdec_release(struct inode *inode, struct file *filp);
@@ -34,6 +34,8 @@ int memory_size = 0;
 MODULE_PARM(memory_size, "i");
 
 int major = 0;
+char* buffer_xor;
+char* buffer_caesar;
 
 struct file_operations fops_caesar = {
 	.open 	 =	encdec_open,
@@ -61,23 +63,27 @@ struct file_operations fops_xor = {
 typedef struct {
 	unsigned char key;
 	int read_state;
-} encdec_private_date;
+} encdec_private_data;
 
 int init_module(void)
 {
+	// arbitrirally to find a major, could've used xor
 	major = register_chrdev(major, MODULE_NAME, &fops_caesar);
 	if(major < 0)
 	{	
 		return major;
 	}
-
 	// Implemetation suggestion:
 	// -------------------------
 	// 1. Allocate memory for the two device buffers using kmalloc (each of them should be of size 'memory_size')
-
+	buffer_caesar = kmalloc(sizeof(char)*memory_size);
+	if(!buffer_caesar) exit(-1);
+	buffer_xor = kmalloc(sizeof(char)*memory_size);
+	if(!buffer_xor) exit(-1);
 	return 0;
 }
 
+// TODO
 void cleanup_module(void)
 {
 	// Implemetation suggestion:
@@ -88,8 +94,23 @@ void cleanup_module(void)
 
 int encdec_open(struct inode *inode, struct file *filp)
 {
+	if(!inode) exit(-1);
 	int minor = MINOR(inode->i_rdev);
-
+	if(!filp) exit(-1);
+	if(minor == 0)
+	{
+		filp->f_op = fops_caesar;
+	}
+	else if(minor == 1)
+	{
+		filp->f_op = fops_xor;
+	}
+	else
+	{
+		exit(-1);
+	}
+	filp->private_data = kmalloc(sizeof(encdec_private_data));
+	if(!flip->private_data) exit(1); 
 	// Implemetation suggestion:
 	// -------------------------
 	// 1. Set 'filp->f_op' to the correct file-operations structure (use the minor value to determine which)
@@ -103,10 +124,12 @@ int encdec_release(struct inode *inode, struct file *filp)
 	// Implemetation suggestion:
 	// -------------------------
 	// 1. Free the allocated memory for 'filp->private_data' (using kfree)
-
+	if(!filp) exit(-1);
+	kfree(filp->private_data);
 	return 0;
 }
 
+// TODO
 int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsigned long arg)
 {
 	// Implemetation suggestion:
@@ -116,7 +139,7 @@ int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsig
 	return 0;
 }
 
-// Add implementations for:
+// Add implementations for: TODO
 // ------------------------
 // 1. ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos );
 // 2. ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
