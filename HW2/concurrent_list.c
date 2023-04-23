@@ -204,9 +204,17 @@ void remove_value(list *list, int value)
 // prints the list serially 
 void print_list(list *list)
 {
-  if(!list) return;
+  if(!list) 
+  {
+    printf("\n"); 
+    return;
+  }
   node* current = getFirst(list);
-  if(!current) return;
+  if(!current) 
+  {
+    printf("\n"); 
+    return;
+  }
   int value;
   while (current->value<INT_MAX)
   {
