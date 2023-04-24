@@ -80,7 +80,6 @@ int init_module(void)
 	return 0;
 }
 
-
 void cleanup_module(void)
 {
 	unregister_chrdev(major,MODULE_NAME);
@@ -135,9 +134,11 @@ int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsig
 	return 0;
 }
 
-// Add implementations for: TODO
-// ------------------------
-// 1. ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos );
-// 2. ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
-// 3. ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_pos );
-// 4. ssize_t encdec_write_xor(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
+
+ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos )
+{
+	
+}
+ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
+ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_pos );
+ssize_t encdec_write_xor(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
