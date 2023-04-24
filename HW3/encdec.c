@@ -73,9 +73,6 @@ int init_module(void)
 	{	
 		return major;
 	}
-	// Implemetation suggestion:
-	// -------------------------
-	// 1. Allocate memory for the two device buffers using kmalloc (each of them should be of size 'memory_size')
 	buffer_caesar = kmalloc(sizeof(char)*memory_size);
 	if(!buffer_caesar) exit(-1);
 	buffer_xor = kmalloc(sizeof(char)*memory_size);
@@ -83,59 +80,58 @@ int init_module(void)
 	return 0;
 }
 
-// TODO
+
 void cleanup_module(void)
 {
-	// Implemetation suggestion:
-	// -------------------------	
-	// 1. Unregister the device-driver
-	// 2. Free the allocated device buffers using kfree
+	unregister_chrdev(major,MODULE_NAME);
+	kfree(buffer_caesar);
+	kfree(buffer_xor);
 }
 
 int encdec_open(struct inode *inode, struct file *filp)
 {
 	if(!inode) exit(-1);
-	int minor = MINOR(inode->i_rdev);
 	if(!filp) exit(-1);
-	if(minor == 0)
-	{
-		filp->f_op = fops_caesar;
-	}
-	else if(minor == 1)
-	{
-		filp->f_op = fops_xor;
-	}
+	int minor = MINOR(inode->i_rdev);
+
+	if(minor == 0)		filp->f_op = fops_caesar;
+	else if(minor == 1)	filp->f_op = fops_xor;
 	else
-	{
-		exit(-1);
-	}
+	exit(-1);
+
 	filp->private_data = kmalloc(sizeof(encdec_private_data));
 	if(!flip->private_data) exit(1); 
-	// Implemetation suggestion:
-	// -------------------------
-	// 1. Set 'filp->f_op' to the correct file-operations structure (use the minor value to determine which)
-	// 2. Allocate memory for 'filp->private_data' as needed (using kmalloc)
-
 	return 0;
 }
 
 int encdec_release(struct inode *inode, struct file *filp)
 {
-	// Implemetation suggestion:
-	// -------------------------
-	// 1. Free the allocated memory for 'filp->private_data' (using kfree)
 	if(!filp) exit(-1);
 	kfree(filp->private_data);
 	return 0;
 }
 
-// TODO
+void zerotize(char* buffer)
+{
+	int i;
+	for(i=0; i<memory_size; i++)
+	{
+		buffer[i] = 0;
+	}
+}
+
 int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsigned long arg)
 {
 	// Implemetation suggestion:
 	// -------------------------
 	// 1. Update the relevant fields in 'filp->private_data' according to the values of 'cmd' and 'arg'
-
+	if((!filp) || (!inode)) exit(-1);
+	switch(cmd):
+	{
+		case (ENCDEC_CMD_CHANGE_KEY): filp->private_data->key = (char) arg; break;
+		case (ENCDEC_CMD_SET_READ_STATE): filp->private_data->read_state = arg; break;
+		case (ENCDEC_CMD_ZERO): zerotize(buffer_caesar); zerotize(buffer_xor); break;
+	}
 	return 0;
 }
 
