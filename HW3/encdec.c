@@ -140,15 +140,19 @@ ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *
 	if(!filp || !buf || count<0 || pos <0) exit(-1);
 	int k = filp->private_data->key;
 	int i = 0;
-	char* encrypted = kmalloc(sizeof(char)*count);
+	char* data = kmalloc(sizeof(char)*count);
 	if(count > memory_size-(*f_pos) + 1) return -EINVAL;
+
 	if(filp->private_data->read_state == ENCDEC_READ_STATE_RAW)
 	for(i = 0; i < count; i++)
-		encrypted[i] = (buf[*f_pos + i]+k)%128;
+		data[i] = (buf[*f_pos + i]+k)%128;
+	
 	else if(filp->private_data->read_state == ENCDEC_READ_STATE_DECRYPT)
 	for(i = 0; i < count; i++)
-		encrypted[i] = buf[*f_pos + i];
-	copy_to_user(buf,encrypted,count);
+		data[i] = buf[*f_pos + i];
+
+
+	copy_to_user(buf,data,count);
 	*f_pos += count;
 }
 ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
