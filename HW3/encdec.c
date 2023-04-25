@@ -57,9 +57,6 @@ struct file_operations fops_xor = {
 	.owner 	 =	THIS_MODULE
 };
 
-// Implemetation suggestion:
-// -------------------------
-// Use this structure as your file-object's private data structure
 typedef struct {
 	unsigned char key;
 	int read_state;
@@ -121,9 +118,6 @@ void zerotize(char* buffer)
 
 int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsigned long arg)
 {
-	// Implemetation suggestion:
-	// -------------------------
-	// 1. Update the relevant fields in 'filp->private_data' according to the values of 'cmd' and 'arg'
 	if((!filp) || (!inode)) exit(-1);
 	switch(cmd):
 	{
@@ -137,24 +131,41 @@ int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsig
 
 ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos )
 {
-	if(!filp || !buf || count<0 || pos <0) exit(-1);
+	if(!filp || !buf || count<0 || *f_pos <0) exit(-1);
 	int k = filp->private_data->key;
 	int i = 0;
+	if(count > memory_size-(*f_pos)) return -EINVAL;
 	char* data = kmalloc(sizeof(char)*count);
-	if(count > memory_size-(*f_pos) + 1) return -EINVAL;
-
 	if(filp->private_data->read_state == ENCDEC_READ_STATE_RAW)
 	for(i = 0; i < count; i++)
-		data[i] = (buf[*f_pos + i]+k)%128;
+		data[i] = (buffer_caesar[*f_pos + i]+k)%128;
 	
 	else if(filp->private_data->read_state == ENCDEC_READ_STATE_DECRYPT)
 	for(i = 0; i < count; i++)
-		data[i] = buf[*f_pos + i];
-
+		data[i] = buffer_caesar[*f_pos + i];
 
 	copy_to_user(buf,data,count);
 	*f_pos += count;
+	kfree(data)
+	return count;
 }
-ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
+
+ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos)
+{
+	if(!filp || !buf || count<0 || *f_pos <0) exit(-1);
+	int i;
+	data = kmalloc(sizeof(char)*count);
+	if(!data) exit(-1);
+	copy_from_user(data,buf,count)
+	if((memory_size - *f_pos) < count) return -EINVAL;
+	for(i=0; i<count; i++)
+	{
+		buffer_caesar[*f_pos + i] = data[i];
+	}
+	*f_pos += count;
+	return count;
+}
+
 ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_pos );
+
 ssize_t encdec_write_xor(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
