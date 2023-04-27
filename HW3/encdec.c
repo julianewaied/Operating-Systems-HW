@@ -24,6 +24,9 @@ int 	encdec_open(struct inode *inode, struct file *filp);
 int 	encdec_release(struct inode *inode, struct file *filp);
 int 	encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsigned long arg);
 
+ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, char* data_buffer, int encryption);
+ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t *f_pos, char* data_buffer);
+
 ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos );
 ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
 
@@ -71,10 +74,10 @@ int init_module(void)
 	{	
 		return major;
 	}
-	buffer_caesar = kmalloc(sizeof(char)*memory_size);
-	if(!buffer_caesar) exit(-1);
-	buffer_xor = kmalloc(sizeof(char)*memory_size);
-	if(!buffer_xor) exit(-1);
+	buffer_caesar = kmalloc( sizeof(char)*memory_size, GFP_KERNEL);
+	if(!buffer_caesar) return -1;
+	buffer_xor = kmalloc(sizeof(char)*memory_size, GFP_KERNEL);
+	if(!buffer_xor) return -1;
 	return 0;
 }
 
@@ -87,23 +90,25 @@ void cleanup_module(void)
 
 int encdec_open(struct inode *inode, struct file *filp)
 {
-	if(!inode) exit(-1);
-	if(!filp) exit(-1);
+	if(!inode) return -1;
+	if(!filp) return -1;
 	int minor = MINOR(inode->i_rdev);
 
-	if(minor == 0)		filp->f_op = fops_caesar;
-	else if(minor == 1)	filp->f_op = fops_xor;
+	if(minor == 0)
+		filp->f_op = &fops_caesar;
+	else if(minor == 1)
+		filp->f_op = &fops_xor;
 	else
-	exit(-1);
+	return -1;
 
-	filp->private_data = kmalloc(sizeof(encdec_private_data));
-	if(!flip->private_data) exit(1); 
+	filp->private_data = (void *) kmalloc(sizeof(encdec_private_data), GFP_KERNEL);
+	if(!filp->private_data) return -1; 
 	return 0;
 }
 
 int encdec_release(struct inode *inode, struct file *filp)
 {
-	if(!filp) exit(-1);
+	if(!filp) return -1;
 	kfree(filp->private_data);
 	return 0;
 }
@@ -119,89 +124,94 @@ void zerotize(char* buffer)
 
 int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsigned long arg)
 {
-	if((!filp) || (!inode)) exit(-1);
-	switch(cmd):
+	if((!filp) || (!inode)) return -1;
+	encdec_private_data* pd = (encdec_private_data*) filp->private_data;
+	if(cmd == ENCDEC_CMD_CHANGE_KEY)
+		pd->key = arg;
+	if(cmd == ENCDEC_CMD_SET_READ_STATE)
+		pd->read_state = arg;
+	if(cmd == ENCDEC_CMD_ZERO) 
 	{
-		case (ENCDEC_CMD_CHANGE_KEY): filp->private_data->key = (char) arg; break;
-		case (ENCDEC_CMD_SET_READ_STATE): filp->private_data->read_state = arg; break;
-		case (ENCDEC_CMD_ZERO): zerotize(buffer_caesar); zerotize(buffer_xor); break;
+		zerotize(buffer_caesar); 
+		zerotize(buffer_xor);
 	}
 	return 0;
 }
 
-ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, int* data_buffer int encryption)
+ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, char* data_buffer, int encryption)
 {
-	if(!filp || !buf || count<0 || *f_pos <0) exit(-1);
-	int k = filp->private_data->key;
+	if(!filp || !buf || count<0 || *f_pos <0) return -EINVAL;
+	encdec_private_data* pd = ((encdec_private_data*)filp->private_data);
+	int k = pd->key;
 	int i = 0;
 	if(memory_size==(*f_pos)) return -EINVAL;
-	char* data = kmalloc(sizeof(char)*count);
-	if(filp->private_data->read_state == ENCDEC_READ_STATE_RAW)
+	char* data = kmalloc(sizeof(char)*count, GFP_KERNEL);
+	if(pd->read_state == ENCDEC_READ_STATE_RAW)
 	{
 		if(encryption == CAESAR)
 			for(i = 0; i < count; i++)
 			{
-				if(*fpos + i == memory_size)	break;
+				if(*f_pos + i == memory_size)	break;
 				data[i] = (data_buffer[i+*f_pos]+k)%128;
 			}
 		else if(encryption == XOR)
 			for(i = 0; i < count; i++)
 			{
-				if(*fpos + i ==memory_size)	break;
+				if(*f_pos + i ==memory_size)	break;
 				data[i] = data_buffer[i+*f_pos] ^ k;
 			}
 	}
 	
-	else if(filp->private_data->read_state == ENCDEC_READ_STATE_DECRYPT)
+	else if(pd->read_state == ENCDEC_READ_STATE_DECRYPT)
 	{
 		for(i = 0; i < count; i++)
 		{
-			if(*fpos + i == memory_size)	break;
+			if(*f_pos + i == memory_size)	break;
 			data[i] = data_buffer[*f_pos + i];
 		}
 	}
 	copy_to_user(buf,data,i);
 	*f_pos += i;
-	kfree(data)
+	kfree(data);
 	if(i!=count) return -EINVAL;
 	return count;
 }
 
-ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t *f_pos, int* data_buffer)
+ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t* f_pos, char* data_buffer)
 {
-	if(!filp || !buf || count<0 || *f_pos <0) exit(-1);
-	int i;
+	if(!filp || !buf || count<0 || *f_pos <0) return -EINVAL;
+	int i = 0;
 	if(memory_size == *f_pos) return -EINVAL;
-	data = kmalloc(sizeof(char)*count);
-	if(!data) exit(-1);
-	copy_from_user(data,buf,count)
+	char* data = kmalloc(sizeof(char)*count, GFP_KERNEL);
+	if(!data) return -EINVAL;
+	copy_from_user(data,buf,count);
 	for(i=0; i<count; i++)
 	{
 		if(*f_pos + i == memory_size) break;
 		data_buffer[*f_pos + i] = data[i];
 	}
 	kfree(data);
-	*f_pos += i;
+	*f_pos = *f_pos + i;
 	if(i<count) return -EINVAL;
 	return count;
 }
 
 ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos )
 {
-	return endec_read(filp,buf,count,f_pos,buffer_caesar,CAESAR);
+	return encdec_read(filp,buf,count,f_pos,buffer_caesar,CAESAR);
 }
 
 ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos)
 {
-	return endec_write(filp,buf,count,f_pos,buffer_caesar);
+	return encdec_write(filp,buf,count,f_pos,buffer_caesar);
 }
 
 ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_pos )
 {
-	return endec_read(filp,buf,count,f_pos,buffer_xor,XOR);
+	return encdec_read(filp,buf,count,f_pos,buffer_xor,XOR);
 }
 
 ssize_t encdec_write_xor(struct file *filp, const char *buf, size_t count, loff_t *f_pos)
 {
-	return endec_write(filp,buf,count,f_pos,buffer_xor);
+	return encdec_write(filp,buf,count,f_pos,buffer_xor);
 }
