@@ -15,7 +15,8 @@
 #include "encdec.h"
 
 #define MODULE_NAME "encdec"
-
+#define CAESAR 0
+#define XOR 1
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Us Probably");
 
@@ -128,8 +129,7 @@ int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsig
 	return 0;
 }
 
-
-ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos )
+ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, int* data_buffer int encryption)
 {
 	if(!filp || !buf || count<0 || *f_pos <0) exit(-1);
 	int k = filp->private_data->key;
@@ -137,14 +137,29 @@ ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *
 	if(memory_size==(*f_pos)) return -EINVAL;
 	char* data = kmalloc(sizeof(char)*count);
 	if(filp->private_data->read_state == ENCDEC_READ_STATE_RAW)
-	for(i = 0; i < count; i++)
-		data[i] = (buffer_caesar[i+*f_pos]+k)%128;
-		if(*fpos + i ==memory_size)	break;
+	{
+		if(encryption == CAESAR)
+			for(i = 0; i < count; i++)
+			{
+				if(*fpos + i == memory_size)	break;
+				data[i] = (data_buffer[i+*f_pos]+k)%128;
+			}
+		else if(encryption == XOR)
+			for(i = 0; i < count; i++)
+			{
+				if(*fpos + i ==memory_size)	break;
+				data[i] = data_buffer[i+*f_pos] ^ k;
+			}
+	}
 	
 	else if(filp->private_data->read_state == ENCDEC_READ_STATE_DECRYPT)
-	for(i = 0; i < count; i++)
-		data[i] = buffer_caesar[*f_pos + i];
-		if(*fpos + i == memory_size)	break;
+	{
+		for(i = 0; i < count; i++)
+		{
+			if(*fpos + i == memory_size)	break;
+			data[i] = data_buffer[*f_pos + i];
+		}
+	}
 	copy_to_user(buf,data,i);
 	*f_pos += i;
 	kfree(data)
@@ -152,22 +167,41 @@ ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *
 	return count;
 }
 
-ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos)
+ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t *f_pos, int* data_buffer)
 {
 	if(!filp || !buf || count<0 || *f_pos <0) exit(-1);
 	int i;
+	if(memory_size == *f_pos) return -EINVAL;
 	data = kmalloc(sizeof(char)*count);
 	if(!data) exit(-1);
 	copy_from_user(data,buf,count)
-	if((memory_size - *f_pos) < count) return -EINVAL;
 	for(i=0; i<count; i++)
 	{
-		buffer_caesar[*f_pos + i] = data[i];
+		if(*f_pos + i == memory_size) break;
+		data_buffer[*f_pos + i] = data[i];
 	}
-	*f_pos += count;
+	kfree(data);
+	*f_pos += i;
+	if(i<count) return -EINVAL;
 	return count;
 }
 
-ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_pos );
+ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos )
+{
+	return endec_read(filp,buf,count,f_pos,buffer_caesar,CAESAR);
+}
 
-ssize_t encdec_write_xor(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
+ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos)
+{
+	return endec_write(filp,buf,count,f_pos,buffer_caesar);
+}
+
+ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_pos )
+{
+	return endec_read(filp,buf,count,f_pos,buffer_xor,XOR);
+}
+
+ssize_t encdec_write_xor(struct file *filp, const char *buf, size_t count, loff_t *f_pos)
+{
+	return endec_write(filp,buf,count,f_pos,buffer_xor);
+}
