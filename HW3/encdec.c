@@ -134,19 +134,21 @@ ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *
 	if(!filp || !buf || count<0 || *f_pos <0) exit(-1);
 	int k = filp->private_data->key;
 	int i = 0;
-	if(count > memory_size-(*f_pos)) return -EINVAL;
+	if(memory_size==(*f_pos)) return -EINVAL;
 	char* data = kmalloc(sizeof(char)*count);
 	if(filp->private_data->read_state == ENCDEC_READ_STATE_RAW)
 	for(i = 0; i < count; i++)
-		data[i] = (buffer_caesar[*f_pos + i]+k)%128;
+		data[i] = (buffer_caesar[i+*f_pos]+k)%128;
+		if(*fpos + i ==memory_size)	break;
 	
 	else if(filp->private_data->read_state == ENCDEC_READ_STATE_DECRYPT)
 	for(i = 0; i < count; i++)
 		data[i] = buffer_caesar[*f_pos + i];
-
-	copy_to_user(buf,data,count);
-	*f_pos += count;
+		if(*fpos + i == memory_size)	break;
+	copy_to_user(buf,data,i);
+	*f_pos += i;
 	kfree(data)
+	if(i!=count) return -EINVAL;
 	return count;
 }
 
