@@ -224,7 +224,7 @@ int main(int argc, const char** argv)
         	}
 			if(cmd_changestate)
 			{
-				printf("state changed")
+				printf("new state is state %s\n",args[3]);
 			}
         	else
         	{
