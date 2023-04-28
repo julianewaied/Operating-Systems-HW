@@ -33,7 +33,7 @@ ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, lo
 ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_pos );
 ssize_t encdec_write_xor(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
 
-int memory_size = 0;
+int memory_size = 20;
 
 MODULE_PARM(memory_size, "i");
 
@@ -103,6 +103,7 @@ int encdec_open(struct inode *inode, struct file *filp)
 
 	filp->private_data = (void *) kmalloc(sizeof(encdec_private_data), GFP_KERNEL);
 	if(!filp->private_data) return -1; 
+	((encdec_private_data*)(filp->private_data))->key = 0;
 	return 0;
 }
 
@@ -125,11 +126,13 @@ void zerotize(char* buffer)
 int encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsigned long arg)
 {
 	if((!filp) || (!inode)) return -1;
-	encdec_private_data* pd = (encdec_private_data*) filp->private_data;
+	encdec_private_data* pd = (encdec_private_data*)(filp->private_data);
 	if(cmd == ENCDEC_CMD_CHANGE_KEY)
 		pd->key = arg;
 	if(cmd == ENCDEC_CMD_SET_READ_STATE)
+	{
 		pd->read_state = arg;
+	}
 	if(cmd == ENCDEC_CMD_ZERO) 
 	{
 		zerotize(buffer_caesar); 
