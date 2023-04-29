@@ -1,0 +1,18 @@
+8c8
+< SUCCESS - Xli$uymgo$fvs{r$js|$nyqtw
+---
+> ERROR - Invalid argument
+7c7
+< SUCCESS - World
+---
+> ERROR - Invalid argument
+9c9
+< SUCCESS -    Hi World
+---
+> ERROR - Invalid argument
+13,14c13,14
+< SUCCESS - 
+< SUCCESS - 
+---
+> ERROR - Invalid argument
+> ERROR - Invalid argument

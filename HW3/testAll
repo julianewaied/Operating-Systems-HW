@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Set the range of test cases
+for i in $(seq 1 5); do
+  # Run the test case and redirect its input to test{i}.in
+  ./test < test${i}.in > test${i}ex.out
+  
+  # Compare the output with the expected output using diff
+  diff test${i}.out test${i}ex.out
+  
+  # Append the output of the diff command to a file called "tests output"
+  diff test${i}.out test${i}ex.out >> tests_output
+  
+  # Wait for user input before continuing to the next test case
+  read -p "Press Enter to continue..."
+done
