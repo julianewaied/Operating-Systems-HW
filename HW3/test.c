@@ -19,7 +19,6 @@ char command[CMD_BUFFER_SIZE];
 int fds[MAX_FD_COUNT];
 char read_buffer[READ_BUFFER_SIZE];
 int read_cmd = 0;
-int cmd_changestate = 0;
 
 char** parse_command(char* command, int* args_count_out)
 {
@@ -65,7 +64,6 @@ char** parse_command(char* command, int* args_count_out)
 int execute_command(char** args, int args_count)
 {
 	read_cmd = 0;
-	cmd_changestate = 0;
 	if(args_count > 0)
 	{
 		if(strcmp(args[0], "open") == 0)
@@ -141,7 +139,6 @@ int execute_command(char** args, int args_count)
 				{
 					cmd_arg = ENCDEC_READ_STATE_DECRYPT;
 				}
-				cmd_changestate = 1;
 			}
 			else if(strcmp(args[2], "zero") == 0)
 			{
@@ -220,12 +217,8 @@ int main(int argc, const char** argv)
         {
         	if(read_cmd)
         	{
-        		printf("SUCCESS- %s\n", read_buffer);
+        		printf("SUCCESS - %s\n", read_buffer);
         	}
-			if(cmd_changestate)
-			{
-				printf("new state is state %s\n",args[3]);
-			}
         	else
         	{
 				printf("SUCCESS\n");

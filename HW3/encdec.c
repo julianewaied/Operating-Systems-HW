@@ -25,7 +25,7 @@ int 	encdec_release(struct inode *inode, struct file *filp);
 int 	encdec_ioctl(struct inode *inode, struct file *filp, unsigned int cmd, unsigned long arg);
 
 ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, char* data_buffer, int encryption);
-ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t *f_pos, char* data_buffer);
+ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t *f_pos, char* data_buffer, int encryption);
 
 ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos );
 ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos);
@@ -149,13 +149,13 @@ ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, c
 	int i = 0;
 	if(memory_size==(*f_pos)) return -EINVAL;
 	char* data = kmalloc(sizeof(char)*count, GFP_KERNEL);
-	if(pd->read_state == ENCDEC_READ_STATE_RAW)
+	if(pd->read_state == ENCDEC_READ_STATE_DECRYPT)
 	{
 		if(encryption == CAESAR)
 			for(i = 0; i < count; i++)
 			{
 				if(*f_pos + i == memory_size)	break;
-				data[i] = (data_buffer[i+*f_pos]+k)%128;
+				data[i] = (data_buffer[i+*f_pos]-k + 128)%128;
 			}
 		else if(encryption == XOR)
 			for(i = 0; i < count; i++)
@@ -165,7 +165,7 @@ ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, c
 			}
 	}
 	
-	else if(pd->read_state == ENCDEC_READ_STATE_DECRYPT)
+	else if(pd->read_state == ENCDEC_READ_STATE_RAW)
 	{
 		for(i = 0; i < count; i++)
 		{
@@ -180,22 +180,36 @@ ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, c
 	return count;
 }
 
-ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t* f_pos, char* data_buffer)
+ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t* f_pos, char* data_buffer,int encryption)
 {
-	if(!filp || !buf || count<0 || *f_pos <0) return -EINVAL;
+	if(!filp || !buf || count<0 || *f_pos <0) return 1;
 	int i = 0;
-	if(memory_size == *f_pos) return -EINVAL;
+	encdec_private_data* pd = (encdec_private_data*) filp->private_data;
+	if(!pd) return 1;
+	int key = pd->key;
+	if(memory_size == *f_pos) return -ENOSPC;
 	char* data = kmalloc(sizeof(char)*count, GFP_KERNEL);
-	if(!data) return -EINVAL;
+	if(!data) return 1;
 	copy_from_user(data,buf,count);
-	for(i=0; i<count; i++)
+	if(encryption == CAESAR)
 	{
-		if(*f_pos + i == memory_size) break;
-		data_buffer[*f_pos + i] = data[i];
+		for(i=0; i<count; i++)
+		{
+			if(*f_pos + i == memory_size) break;
+			data_buffer[*f_pos + i] = (data[i]+key)%128;
+		}
+	}
+	else if(encryption==XOR)
+	{
+		for(i=0; i<count; i++)
+		{
+			if(*f_pos + i == memory_size) break;
+			data_buffer[*f_pos + i] = (data[i])^key;
+		}
 	}
 	kfree(data);
 	*f_pos = *f_pos + i;
-	if(i<count) return -EINVAL;
+	if(i<count) return -ENOSPC;
 	return count;
 }
 
@@ -206,7 +220,7 @@ ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *
 
 ssize_t encdec_write_caesar(struct file *filp, const char *buf, size_t count, loff_t *f_pos)
 {
-	return encdec_write(filp,buf,count,f_pos,buffer_caesar);
+	return encdec_write(filp,buf,count,f_pos,buffer_caesar,CAESAR);
 }
 
 ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_pos )
@@ -216,5 +230,5 @@ ssize_t encdec_read_xor( struct file *filp, char *buf, size_t count, loff_t *f_p
 
 ssize_t encdec_write_xor(struct file *filp, const char *buf, size_t count, loff_t *f_pos)
 {
-	return encdec_write(filp,buf,count,f_pos,buffer_xor);
+	return encdec_write(filp,buf,count,f_pos,buffer_xor,XOR);
 }
