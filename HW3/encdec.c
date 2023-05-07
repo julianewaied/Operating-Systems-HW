@@ -176,8 +176,7 @@ ssize_t encdec_read(struct file *filp, char *buf, size_t count, loff_t *f_pos, c
 	copy_to_user(buf,data,i);
 	*f_pos += i;
 	kfree(data);
-	if(i!=count) return -EINVAL;
-	return count;
+	return i;
 }
 
 ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t* f_pos, char* data_buffer,int encryption)
@@ -209,8 +208,7 @@ ssize_t encdec_write(struct file *filp, const char *buf, size_t count, loff_t* f
 	}
 	kfree(data);
 	*f_pos = *f_pos + i;
-	if(i<count) return -ENOSPC;
-	return count;
+	return i;
 }
 
 ssize_t encdec_read_caesar( struct file *filp, char *buf, size_t count, loff_t *f_pos )
