@@ -48,6 +48,12 @@ int getVPage(int log_address)
     return (log_address & 0xff00) >> 8;
 }
 
+int getPPage(int logical_page)
+{
+    int i = 0;
+    return i;
+}
+
 int main(int argc, const char *argv[])
 {
     if (argc != 3) {
