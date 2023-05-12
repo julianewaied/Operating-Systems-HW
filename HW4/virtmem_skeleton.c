@@ -115,6 +115,12 @@ int main(int argc, const char *argv[])
         }
         tlb_hits += TLB_HIT(physical_data);
         int physical_page = FRAME(physical_data);
+        if(TLB_HIT(physical_data))
+        {
+            tlbindex = (tlbindex + 1)%TLB_SIZE;
+            tlb[tlbindex].logical = logical_page;
+            tlb[tlbindex].physical = physical_page;
+        }
         int address = physical_address + OFFSET(logical_address);
         value = main_memory[address];
         printf("Virtual address: %d Physical address: %d Value: %d\n", logical_address, physical_address, value);
