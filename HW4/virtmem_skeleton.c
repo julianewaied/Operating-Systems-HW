@@ -43,9 +43,10 @@ signed char main_memory[MEMORY_SIZE];
 // Pointer to memory mapped backing file
 signed char *backing;
 
-// -----------------------------------------------------------------
-// -------- YOUR CODE HERE: helper functions of your choice --------
-// -----------------------------------------------------------------
+int getVPage(int log_address)
+{
+    return (log_address & 0xff00) >> 8;
+}
 
 int main(int argc, const char *argv[])
 {
@@ -82,7 +83,8 @@ int main(int argc, const char *argv[])
     while (fgets(buffer, BUFFER_SIZE, input_fp) != NULL) 
     {
         int logical_address = atoi(buffer);
-
+        total_addresses++;
+        int logical_page = getVPage(logical_address)
         // -------------------------------------------------------------------------------------
         // -------- YOUR CODE HERE: translation of logical address to physical address  --------
         // -------------------------------------------------------------------------------------
