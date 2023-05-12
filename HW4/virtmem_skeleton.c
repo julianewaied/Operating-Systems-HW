@@ -19,7 +19,14 @@
 #define OFFSET_BITS 8
 #define OFFSET_MASK 255
 
+#define PAGE_NUM_MASK 0xff00
+#define PAGE_FAULT -1
+
 #define MEMORY_SIZE PAGES * PAGE_SIZE
+
+#define TLB_HIT(X) X&1
+#define FRAME(X) X>>1
+#define OFFSET(X) X&OFFSET_MASK
 
 // Max number of characters per line of input file to read.
 #define BUFFER_SIZE 10
@@ -45,13 +52,23 @@ signed char *backing;
 
 int getVPage(int log_address)
 {
-    return (log_address & 0xff00) >> 8;
+    return (log_address & PAGE_NUM_MASK) >> OFFSET_BITS;
 }
 
 int getPPage(int logical_page)
 {
-    int i = 0;
-    return i;
+    if (logical_page < 0 || logical_page >= PAGES)
+        return PAGE_FAULT;
+    int i;
+    for (i = 0;i < TLB_SIZE;i++)
+    {
+        // bit 0 indicates it was a TLB hit. use macro TLB_HIT() to restore it
+        // the rest is phyisical page (frame). use macro FRAME() to restore it
+        // no overflow, physical page address is 8 bits.
+        if (tlb[i].logical == logical_page) return tlb[i].physical<<1+1;
+    }
+    if (pagetable[logical_page] == -1) return PAGE_FAULT;
+    return pagetable[logical_page];
 }
 
 int main(int argc, const char *argv[])
@@ -90,11 +107,16 @@ int main(int argc, const char *argv[])
     {
         int logical_address = atoi(buffer);
         total_addresses++;
-        int logical_page = getVPage(logical_address)
-        // -------------------------------------------------------------------------------------
-        // -------- YOUR CODE HERE: translation of logical address to physical address  --------
-        // -------------------------------------------------------------------------------------
-
+        int logical_page = getVPage(logical_address);
+        int physical_data = getPPage(logical_page);
+        if (physical_data == PAGE_FAULT)
+        {
+            // handle page fault.
+        }
+        tlb_hits += TLB_HIT(physical_data);
+        int physical_page = FRAME(physical_data);
+        int address = physical_address + OFFSET(logical_address);
+        value = main_memory[address];
         printf("Virtual address: %d Physical address: %d Value: %d\n", logical_address, physical_address, value);
     }
 
