@@ -115,7 +115,7 @@ int main(int argc, const char *argv[])
         }
         tlb_hits += TLB_HIT(physical_data);
         int physical_page = FRAME(physical_data);
-        if(TLB_HIT(physical_data))
+        if(!TLB_HIT(physical_data))
         {
             tlbindex = (tlbindex + 1)%TLB_SIZE;
             tlb[tlbindex].logical = logical_page;
