@@ -26,7 +26,7 @@
 
 #define TLB_HIT(X) X&1
 #define FRAME(X) X>>1
-#define OFFSET(X) X&OFFSET_MASK
+#define OFFSET(X) (X&OFFSET_MASK)
 
 // Max number of characters per line of input file to read.
 #define BUFFER_SIZE 10
@@ -65,10 +65,10 @@ int getPPage(int logical_page)
         // bit 0 indicates it was a TLB hit. use macro TLB_HIT() to restore it
         // the rest is phyisical page (frame). use macro FRAME() to restore it
         // no overflow, physical page address is 8 bits.
-        if (tlb[i].logical == logical_page) return tlb[i].physical<<1+1;
+        if (tlb[i].logical == logical_page) return (tlb[i].physical<<1)+1;
     }
     if (pagetable[logical_page] == -1) return PAGE_FAULT;
-    return pagetable[logical_page];
+    return pagetable[logical_page]<<1;
 }
 
 void copy_backed_to_mem(int Vpage_number) {
@@ -131,18 +131,19 @@ int main(int argc, const char *argv[])
 
             copy_backed_to_mem(logical_page);
         }
-        tlb_hits += TLB_HIT(physical_data);
+        tlb_hits += (TLB_HIT(physical_data));
         int physical_page = FRAME(physical_data);
-        if(!TLB_HIT(physical_data))
+
+        if(!(TLB_HIT(physical_data)))
         {
             tlbindex = (tlbindex + 1)%TLB_SIZE;
             tlb[tlbindex].logical = logical_page;
             tlb[tlbindex].physical = physical_page;
         }
-        fprintf(stdout,"%s","test");
-        int physical_address=physical_page*PAGE_SIZE;
-        int address = physical_address + OFFSET(logical_address);
-        int value = main_memory[address];
+        printf("%d--%d--%d--",physical_page,OFFSET(logical_address),PAGE_SIZE);
+        int physical_address= physical_page*PAGE_SIZE+OFFSET(logical_address);
+        printf("%d",physical_address);
+        int value = main_memory[physical_address];
         printf("Virtual address: %d Physical address: %d Value: %d\n", logical_address, physical_address, value);
     }
 
