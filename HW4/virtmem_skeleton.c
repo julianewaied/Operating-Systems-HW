@@ -124,6 +124,9 @@ int main(int argc, const char *argv[])
         {
             page_faults++;
             pagetable[logical_page] = free_page;
+            physical_data=free_page;
+            physical_data= (physical_data << 1);
+
             free_page++;
 
             copy_backed_to_mem(logical_page);
@@ -136,8 +139,10 @@ int main(int argc, const char *argv[])
             tlb[tlbindex].logical = logical_page;
             tlb[tlbindex].physical = physical_page;
         }
+        fprintf(stdout,"%s","test");
+        int physical_address=physical_page*PAGE_SIZE;
         int address = physical_address + OFFSET(logical_address);
-        value = main_memory[address];
+        int value = main_memory[address];
         printf("Virtual address: %d Physical address: %d Value: %d\n", logical_address, physical_address, value);
     }
 
