@@ -22,10 +22,10 @@
 #define PAGE_NUM_MASK 0xff00
 #define PAGE_FAULT -1
 
-#define MEMORY_SIZE PAGES * PAGE_SIZE
+#define MEMORY_SIZE (PAGES * PAGE_SIZE)
 
-#define TLB_HIT(X) X&1
-#define FRAME(X) X>>1
+#define TLB_HIT(X) (X&1)
+#define FRAME(X) (X>>1)
 #define OFFSET(X) (X&OFFSET_MASK)
 
 // Max number of characters per line of input file to read.
