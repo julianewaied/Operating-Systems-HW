@@ -140,9 +140,7 @@ int main(int argc, const char *argv[])
             tlb[tlbindex].logical = logical_page;
             tlb[tlbindex].physical = physical_page;
         }
-        printf("%d--%d--%d--",physical_page,OFFSET(logical_address),PAGE_SIZE);
         int physical_address= physical_page*PAGE_SIZE+OFFSET(logical_address);
-        printf("%d",physical_address);
         int value = main_memory[physical_address];
         printf("Virtual address: %d Physical address: %d Value: %d\n", logical_address, physical_address, value);
     }
