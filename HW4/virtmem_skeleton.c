@@ -71,6 +71,17 @@ int getPPage(int logical_page)
     return pagetable[logical_page];
 }
 
+void copy_backed_to_mem(int Vpage_number) {
+    int Ppage_number = pagetable[Vpage_number];
+    int backing_index_start= Vpage_number*PAGE_SIZE;
+    int memory_index_start = Ppage_number * PAGE_SIZE;
+
+    for (int i = 0; i < PAGE_SIZE; i++) {
+        main_memory[memory_index_start + i] = backing[backing_index_start + i];
+    }
+
+}
+
 int main(int argc, const char *argv[])
 {
     if (argc != 3) {
@@ -111,7 +122,11 @@ int main(int argc, const char *argv[])
         int physical_data = getPPage(logical_page);
         if (physical_data == PAGE_FAULT)
         {
-            // handle page fault.
+            page_faults++;
+            pagetable[logical_page] = free_page;
+            free_page++;
+
+            copy_backed_to_mem(logical_page);
         }
         tlb_hits += TLB_HIT(physical_data);
         int physical_page = FRAME(physical_data);
